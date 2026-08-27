@@ -5,8 +5,24 @@
 body {
   overflow-x: hidden;
   scroll-behavior: smooth;
-  background-color: #faf9f6; /* warm linen background */
+  background-color: #FBF7F2; /* warm cream background */
+  color: #1c1917; /* near-black default text - stone-900 */
 }
+
+/* Make muted/grey text readable - override stone-300/400/500 to darker tones */
+.text-stone-300, .text-stone-350 {
+  color: #78716c !important; /* stone-500 */
+}
+.text-stone-400, .text-stone-450 {
+  color: #57534e !important; /* stone-600 */
+}
+.text-stone-500 {
+  color: #44403c !important; /* stone-700 */
+}
+.text-gray-400, .text-gray-500 {
+  color: #57534e !important;
+}
+
 
 /* Premium Minimal Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -14,7 +30,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #faf9f6;
+  background: #FBF7F2;
 }
 ::-webkit-scrollbar-thumb {
   background: #e7e5e4;

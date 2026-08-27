@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-stone-900 text-stone-300 border-t border-stone-850">
+  <footer class="bg-stone-900 text-stone-600 border-t border-stone-850">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-12">
         
@@ -8,7 +8,7 @@
           <span class="font-serif text-2xl font-bold bg-gradient-to-r from-rose-450 to-pink-500 bg-clip-text text-transparent flex items-center gap-1.5 cursor-pointer" @click="setView('home')">
             CraftedLove
           </span>
-          <p class="text-sm text-stone-400 leading-relaxed">
+          <p class="text-sm text-stone-700 leading-relaxed">
             We curate and hand-pour beautiful, modern decor objects, pressed floral frames, and single-origin artisanal chocolates. Every piece is made with love by our collective of local artists.
           </p>
           <div class="flex items-center space-x-3 text-stone-500 pt-2">
@@ -27,7 +27,7 @@
         <!-- Column 2: Navigation Links -->
         <div class="space-y-4">
           <h3 class="font-serif text-lg font-semibold text-white">Quick Links</h3>
-          <ul class="space-y-2 text-sm text-stone-400">
+          <ul class="space-y-2 text-sm text-stone-700">
             <li><a @click="setView('home')" class="hover:text-rose-400 cursor-pointer transition-colors">Home</a></li>
             <li><a @click="setView('shop')" class="hover:text-rose-400 cursor-pointer transition-colors">Shop Catalog</a></li>
             <li><a @click="setView('about')" class="hover:text-rose-400 cursor-pointer transition-colors">Our Story</a></li>
@@ -38,7 +38,7 @@
         <!-- Column 3: Contact Details -->
         <div class="space-y-4">
           <h3 class="font-serif text-lg font-semibold text-white">Get in Touch</h3>
-          <ul class="space-y-2.5 text-sm text-stone-400">
+          <ul class="space-y-2.5 text-sm text-stone-700">
             <li class="flex items-center gap-2">
               <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
               <span>456 Artisan Way, Studio 12, Portland, OR</span>
@@ -57,7 +57,7 @@
         <!-- Column 4: Newsletter -->
         <div class="space-y-4">
           <h3 class="font-serif text-lg font-semibold text-white">Join the Family</h3>
-          <p class="text-sm text-stone-400 leading-relaxed">
+          <p class="text-sm text-stone-700 leading-relaxed">
             Subscribe to receive studio updates, new product collection launches, and a **10% discount** code.
           </p>
           <form @submit.prevent="handleNewsletter" class="flex flex-col sm:flex-row gap-2 mt-2">

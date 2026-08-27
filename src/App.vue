@@ -28,7 +28,7 @@
     </div>
 
     <!-- Main Website Shell -->
-    <div class="min-h-screen bg-stone-50 flex flex-col font-sans select-none">
+    <div class="min-h-screen flex flex-col font-sans select-none" style="background-color: #FBF7F2;">
     
     <!-- NAVBAR -->
     <Navbar 

@@ -4,7 +4,7 @@
     <!-- Page Title -->
     <div class="border-b border-stone-150 pb-6 mb-8">
       <h1 class="font-serif text-3xl sm:text-4xl font-bold text-stone-850">Explore Catalog</h1>
-      <p class="text-sm text-stone-400 mt-2">Discover handcrafted wonders, mirror arts, and premium chocolate box collections.</p>
+      <p class="text-sm text-stone-700 mt-2">Discover handcrafted wonders, mirror arts, and premium chocolate box collections.</p>
     </div>
 
     <!-- Filters & Catalog Grid Layout -->
@@ -17,7 +17,7 @@
         <div class="bg-stone-50 border border-stone-100 rounded-2xl p-5 space-y-2.5">
           <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Search Products</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-700">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             </span>
             <input 
@@ -83,9 +83,9 @@
         
         <!-- Empty State -->
         <div v-if="filteredProducts.length === 0" class="flex flex-col items-center justify-center py-20 bg-stone-50 rounded-2xl border border-stone-100 text-center">
-          <svg class="w-12 h-12 text-stone-300 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25m-2.25-2.25l-2.25 2.25m2.25-2.25l2.25-2.25M3.75 7.5h16.5M9 3.75h6m-6 3a3 3 0 016 0M4 7.5L3 5.5a1.5 1.5 0 011.5-1.5h15A1.5 1.5 0 0121 5.5l-1 2"/></svg>
+          <svg class="w-12 h-12 text-stone-600 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25m-2.25-2.25l-2.25 2.25m2.25-2.25l2.25-2.25M3.75 7.5h16.5M9 3.75h6m-6 3a3 3 0 016 0M4 7.5L3 5.5a1.5 1.5 0 011.5-1.5h15A1.5 1.5 0 0121 5.5l-1 2"/></svg>
           <h3 class="font-bold text-stone-700 text-lg">No products found</h3>
-          <p class="text-sm text-stone-400 mt-1 px-8">Try adjusting your filters or searching for something else.</p>
+          <p class="text-sm text-stone-700 mt-1 px-8">Try adjusting your filters or searching for something else.</p>
           <button @click="searchQuery = ''; selectCategory('All'); hideOutOfStock = false;" class="mt-4 px-5 py-2 bg-stone-900 text-white rounded-full text-xs font-semibold hover:bg-stone-850 transition-colors">Clear All Filters</button>
         </div>
 
@@ -127,7 +127,7 @@
               
               <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs text-stone-400 font-medium">{{ product.category }}</span>
+                  <span class="text-xs text-stone-700 font-medium">{{ product.category }}</span>
                   <!-- Stars -->
                   <div class="flex items-center gap-1">
                     <svg class="w-3.5 h-3.5 fill-current text-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -137,7 +137,7 @@
                 <h3 @click="openDetail(product)" class="font-serif text-base sm:text-lg font-bold text-stone-800 line-clamp-1 hover:text-rose-500 transition-colors cursor-pointer leading-tight">
                   {{ product.name }}
                 </h3>
-                <p class="text-xs text-stone-400 line-clamp-2 leading-relaxed">
+                <p class="text-xs text-stone-700 line-clamp-2 leading-relaxed">
                   {{ product.description }}
                 </p>
               </div>
@@ -154,7 +154,7 @@
                 <button 
                   v-else
                   disabled
-                  class="py-2 px-4 bg-stone-100 text-stone-400 text-xs font-semibold rounded-full cursor-not-allowed"
+                  class="py-2 px-4 bg-stone-100 text-stone-700 text-xs font-semibold rounded-full cursor-not-allowed"
                 >
                   Unavailable
                 </button>
@@ -174,7 +174,7 @@
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative animate-slideUp">
           
           <!-- Close Modal -->
-          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-400 hover:text-stone-600 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-stone-50 transition-colors z-10 border border-stone-100 shadow-sm">
+          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-700 hover:text-stone-600 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-stone-50 transition-colors z-10 border border-stone-100 shadow-sm">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
 
@@ -219,7 +219,7 @@
                 <div class="flex items-center gap-1 bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">
                   <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                   <span>{{ selectedProduct.rating }}</span>
-                  <span class="text-stone-400 font-normal text-xs">({{ selectedProduct.reviews ? selectedProduct.reviews.length : 0 }} reviews)</span>
+                  <span class="text-stone-700 font-normal text-xs">({{ selectedProduct.reviews ? selectedProduct.reviews.length : 0 }} reviews)</span>
                 </div>
               </div>
 
@@ -248,7 +248,7 @@
               </div>
 
               <!-- Description -->
-              <p class="text-sm text-stone-400 leading-relaxed">{{ selectedProduct.description }}</p>
+              <p class="text-sm text-stone-700 leading-relaxed">{{ selectedProduct.description }}</p>
 
               <!-- Purchase Quantity Selector -->
               <div v-if="selectedProduct.inventory > 0" class="flex items-center gap-4 pt-2">
@@ -256,12 +256,12 @@
                 <div class="flex items-center border border-stone-200 rounded-xl overflow-hidden bg-stone-50">
                   <button 
                     @click="modalQuantity = Math.max(1, modalQuantity - 1)" 
-                    class="px-3.5 py-1.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors font-semibold"
+                    class="px-3.5 py-1.5 text-stone-700 hover:text-stone-700 hover:bg-stone-100 transition-colors font-semibold"
                   >-</button>
                   <span class="px-4 font-bold text-stone-750 min-w-[24px] text-center">{{ modalQuantity }}</span>
                   <button 
                     @click="modalQuantity = Math.min(selectedProduct.inventory, modalQuantity + 1)" 
-                    class="px-3.5 py-1.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors font-semibold"
+                    class="px-3.5 py-1.5 text-stone-700 hover:text-stone-700 hover:bg-stone-100 transition-colors font-semibold"
                   >+</button>
                 </div>
               </div>
@@ -279,7 +279,7 @@
               <button 
                 v-else
                 disabled
-                class="w-full py-3.5 bg-stone-100 text-stone-400 font-semibold rounded-xl cursor-not-allowed"
+                class="w-full py-3.5 bg-stone-100 text-stone-700 font-semibold rounded-xl cursor-not-allowed"
               >
                 Out of Stock
               </button>
@@ -307,7 +307,7 @@
 
                   <!-- Stars Selector -->
                   <div class="flex items-center gap-2">
-                    <span class="text-xs text-stone-400 font-medium">Rating:</span>
+                    <span class="text-xs text-stone-700 font-medium">Rating:</span>
                     <select 
                       v-model="reviewRating"
                       class="px-2.5 py-1.5 bg-white border border-stone-200 rounded-xl text-stone-700 text-xs focus:outline-none cursor-pointer"
@@ -343,14 +343,14 @@
               </div>
 
               <!-- Reviews list -->
-              <div v-if="!selectedProduct.reviews || selectedProduct.reviews.length === 0" class="text-center text-xs text-stone-400 py-4">
+              <div v-if="!selectedProduct.reviews || selectedProduct.reviews.length === 0" class="text-center text-xs text-stone-700 py-4">
                 No reviews yet. Be the first to share your thoughts!
               </div>
               <div v-else class="space-y-3.5">
                 <div v-for="(review, index) in selectedProduct.reviews" :key="index" class="border-b border-stone-50 pb-3 last:border-b-0 space-y-1">
                   <div class="flex items-center justify-between text-xs">
                     <span class="font-bold text-stone-700">{{ review.user }}</span>
-                    <span class="text-stone-400">{{ review.date }}</span>
+                    <span class="text-stone-700">{{ review.date }}</span>
                   </div>
                   <!-- Stars -->
                   <div class="flex text-amber-400">

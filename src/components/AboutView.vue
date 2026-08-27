@@ -32,14 +32,14 @@
           <img src="/assets/images/bottle-collection.png" alt="Crafted Love Art Collection" class="w-full h-full object-cover" />
         </div>
         <div class="space-y-2">
-          <p class="text-stone-400 text-xs font-semibold uppercase tracking-widest">A Message from the Maker</p>
+          <p class="text-stone-700 text-xs font-semibold uppercase tracking-widest">A Message from the Maker</p>
           <p class="text-stone-600 text-sm italic leading-relaxed">
             "Thank you for supporting handmade creativity and being a part of the Crafted Love journey."
           </p>
           <div class="pt-2 border-t border-stone-200/60 flex items-center justify-between">
             <div>
               <p class="font-serif font-bold text-stone-800 text-base">Sonali Dhupal</p>
-              <p class="text-xs text-stone-400 font-semibold tracking-wider uppercase">Founder, Crafted Love</p>
+              <p class="text-xs text-stone-700 font-semibold tracking-wider uppercase">Founder, Crafted Love</p>
             </div>
             <span class="text-rose-500 text-xl font-serif">❤️</span>
           </div>

@@ -3,9 +3,9 @@
     
     <!-- Redirect if not logged in -->
     <div v-if="!store.currentUser" class="flex flex-col items-center justify-center py-20 text-center bg-stone-50 rounded-2xl border border-stone-100">
-      <svg class="w-16 h-16 text-stone-300 mb-4 animate-bounce" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z"/></svg>
+      <svg class="w-16 h-16 text-stone-600 mb-4 animate-bounce" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z"/></svg>
       <h2 class="text-xl font-bold text-stone-700">Account Access Required</h2>
-      <p class="text-stone-400 text-sm mt-1 max-w-sm">Please log in or register to view your order history and live shipping trackers.</p>
+      <p class="text-stone-700 text-sm mt-1 max-w-sm">Please log in or register to view your order history and live shipping trackers.</p>
       <button @click="$parent.authModalOpen = true" class="mt-6 px-6 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-full shadow-md active:scale-95 transition-all text-sm">Log In Now</button>
     </div>
 
@@ -19,7 +19,7 @@
           </div>
           <div>
             <h1 class="font-serif text-2xl font-bold text-stone-850">Hello, {{ store.currentUser.name }}</h1>
-            <p class="text-xs text-stone-400 mt-0.5">Account email: {{ store.currentUser.email }}</p>
+            <p class="text-xs text-stone-700 mt-0.5">Account email: {{ store.currentUser.email }}</p>
           </div>
         </div>
         <div class="flex items-center gap-3">
@@ -27,7 +27,7 @@
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
             Admin Access Enabled
           </span>
-          <button @click="store.logout(); setView('home');" class="text-xs font-semibold text-stone-400 hover:text-rose-500 border border-stone-200 hover:border-rose-100 px-4 py-1.5 rounded-full bg-white transition-all">Sign Out</button>
+          <button @click="store.logout(); setView('home');" class="text-xs font-semibold text-stone-700 hover:text-rose-500 border border-stone-200 hover:border-rose-100 px-4 py-1.5 rounded-full bg-white transition-all">Sign Out</button>
         </div>
       </div>
 
@@ -38,11 +38,11 @@
         <div class="lg:col-span-1 space-y-4">
           <h2 class="font-serif text-lg sm:text-xl font-bold text-stone-800 flex items-center justify-between">
             Order History
-            <span class="text-xs font-normal text-stone-400 bg-stone-100 px-2 py-0.5 rounded-full">{{ userOrders.length }} orders</span>
+            <span class="text-xs font-normal text-stone-700 bg-stone-100 px-2 py-0.5 rounded-full">{{ userOrders.length }} orders</span>
           </h2>
 
           <!-- Empty Orders State -->
-          <div v-if="userOrders.length === 0" class="border border-dashed border-stone-200 rounded-2xl p-8 text-center text-stone-400 space-y-4">
+          <div v-if="userOrders.length === 0" class="border border-dashed border-stone-200 rounded-2xl p-8 text-center text-stone-700 space-y-4">
             <p class="text-sm">You haven't placed any orders yet.</p>
             <button @click="setView('shop')" class="text-xs font-semibold text-rose-500 border border-rose-200 px-4 py-2 rounded-full hover:bg-rose-50/50 transition-colors">Start Shopping</button>
           </div>
@@ -71,7 +71,7 @@
                 </span>
               </div>
               <div class="flex justify-between items-end text-xs mt-3">
-                <div class="text-stone-400 space-y-0.5">
+                <div class="text-stone-700 space-y-0.5">
                   <p>{{ formatDate(order.date).split(',')[0] }}</p>
                   <p class="line-clamp-1">{{ order.items.length }} product(s)</p>
                 </div>
@@ -92,9 +92,9 @@
               <div>
                 <h2 class="text-lg font-bold text-stone-800 flex items-center gap-2">
                   Order Details
-                  <span class="font-mono text-stone-400 text-sm font-semibold">#{{ selectedOrder.id }}</span>
+                  <span class="font-mono text-stone-700 text-sm font-semibold">#{{ selectedOrder.id }}</span>
                 </h2>
-                <p class="text-xs text-stone-400 mt-0.5">Placed on: {{ formatDate(selectedOrder.date) }}</p>
+                <p class="text-xs text-stone-700 mt-0.5">Placed on: {{ formatDate(selectedOrder.date) }}</p>
               </div>
               
               <span 
@@ -128,47 +128,47 @@
                 <div class="relative z-10 flex flex-col items-center text-center">
                   <div 
                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm transition-all"
-                    :class="getStatusStep(selectedOrder.status) >= 0 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-400'"
+                    :class="getStatusStep(selectedOrder.status) >= 0 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-700'"
                   >
                     ✓
                   </div>
-                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 0 ? 'text-rose-500' : 'text-stone-400'">Placed</span>
+                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 0 ? 'text-rose-500' : 'text-stone-700'">Placed</span>
                 </div>
 
                 <!-- Step 2: Processing -->
                 <div class="relative z-10 flex flex-col items-center text-center">
                   <div 
                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm transition-all"
-                    :class="getStatusStep(selectedOrder.status) >= 1 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-400'"
+                    :class="getStatusStep(selectedOrder.status) >= 1 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-700'"
                   >
                     <span v-if="getStatusStep(selectedOrder.status) >= 1">✓</span>
                     <span v-else>2</span>
                   </div>
-                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 1 ? 'text-rose-500' : 'text-stone-400'">Preparing</span>
+                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 1 ? 'text-rose-500' : 'text-stone-700'">Preparing</span>
                 </div>
 
                 <!-- Step 3: Shipped -->
                 <div class="relative z-10 flex flex-col items-center text-center">
                   <div 
                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm transition-all"
-                    :class="getStatusStep(selectedOrder.status) >= 2 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-400'"
+                    :class="getStatusStep(selectedOrder.status) >= 2 ? 'bg-rose-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-700'"
                   >
                     <span v-if="getStatusStep(selectedOrder.status) >= 2">✓</span>
                     <span v-else>3</span>
                   </div>
-                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 2 ? 'text-rose-500' : 'text-stone-400'">Shipped</span>
+                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 2 ? 'text-rose-500' : 'text-stone-700'">Shipped</span>
                 </div>
 
                 <!-- Step 4: Delivered -->
                 <div class="relative z-10 flex flex-col items-center text-center">
                   <div 
                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm transition-all"
-                    :class="getStatusStep(selectedOrder.status) >= 3 ? 'bg-green-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-400'"
+                    :class="getStatusStep(selectedOrder.status) >= 3 ? 'bg-green-500 text-white' : 'bg-white border-2 border-stone-200 text-stone-700'"
                   >
                     <span v-if="getStatusStep(selectedOrder.status) >= 3">✓</span>
                     <span v-else>4</span>
                   </div>
-                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 3 ? 'text-green-600' : 'text-stone-400'">Arrived</span>
+                  <span class="text-xs font-semibold mt-2" :class="getStatusStep(selectedOrder.status) >= 3 ? 'text-green-600' : 'text-stone-700'">Arrived</span>
                 </div>
 
               </div>
@@ -179,14 +179,14 @@
                   v-for="(log, idx) in [...selectedOrder.timeline].reverse()" 
                   :key="idx" 
                   class="flex gap-3 text-xs leading-relaxed border-l-2 pl-3 pb-2 last:pb-0"
-                  :class="idx === 0 ? 'border-rose-500 text-stone-800' : 'border-stone-200 text-stone-400'"
+                  :class="idx === 0 ? 'border-rose-500 text-stone-800' : 'border-stone-200 text-stone-700'"
                 >
                   <div class="flex-grow">
                     <div class="flex items-center justify-between">
                       <span class="font-bold uppercase tracking-wider text-[9px]" :class="idx === 0 ? 'text-rose-500' : 'text-stone-500'">{{ log.status }}</span>
                       <span class="text-[9px] text-stone-450">{{ formatDate(log.time) }}</span>
                     </div>
-                    <p class="mt-0.5" :class="idx === 0 ? 'font-medium' : 'text-stone-400'">{{ log.note }}</p>
+                    <p class="mt-0.5" :class="idx === 0 ? 'font-medium' : 'text-stone-700'">{{ log.note }}</p>
                   </div>
                 </div>
               </div>
@@ -202,7 +202,7 @@
                   <img :src="item.product.image" :alt="item.product.name" class="w-12 h-12 rounded-lg object-cover bg-stone-50 flex-shrink-0" />
                   <div class="flex-grow text-xs sm:text-sm">
                     <h4 class="font-bold text-stone-850 line-clamp-1 leading-snug">{{ item.product.name }}</h4>
-                    <p class="text-stone-400 mt-0.5">{{ item.product.category }} — Qty: {{ item.quantity }}</p>
+                    <p class="text-stone-700 mt-0.5">{{ item.product.category }} — Qty: {{ item.quantity }}</p>
                   </div>
                   <span class="font-bold text-stone-700 text-xs sm:text-sm">₹<span>{{ (item.product.price * item.quantity).toFixed(2) }}</span></span>
                 </div>
@@ -250,8 +250,8 @@
           </div>
 
           <!-- Selected Order fallback if none chosen -->
-          <div v-else class="border border-stone-100 rounded-3xl p-16 text-center text-stone-400 bg-white">
-            <svg class="w-12 h-12 text-stone-300 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M11.35 16.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zM19.5 16.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/><path d="M6 7.5h13.5l-1.5 8.25H8.25L6 7.5zM6 7.5L4.5 4.5h-2"/></svg>
+          <div v-else class="border border-stone-100 rounded-3xl p-16 text-center text-stone-700 bg-white">
+            <svg class="w-12 h-12 text-stone-600 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M11.35 16.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zM19.5 16.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/><path d="M6 7.5h13.5l-1.5 8.25H8.25L6 7.5zM6 7.5L4.5 4.5h-2"/></svg>
             <p>Select an order from the history to track its live delivery status.</p>
           </div>
 
