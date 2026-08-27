@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background-color: #faf9f6; /* warm linen background */
+}
+
+/* Premium Minimal Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #faf9f6;
+}
+::-webkit-scrollbar-thumb {
+  background: #e7e5e4;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d6d3d1;
+}
+
+/* Custom CSS transitions for Homepage Staggered Panels */
+.stagger-panel {
+  transition: flex-grow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              flex-shrink 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}

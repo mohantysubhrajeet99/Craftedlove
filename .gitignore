@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+.env.production
+
+# Vite build output
+dist/
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
