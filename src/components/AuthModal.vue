@@ -115,18 +115,6 @@
         </p>
       </div>
 
-      <!-- Helper hint for testing -->
-      <div class="mt-6 pt-4 border-t border-stone-50 bg-stone-50 rounded-xl p-3 text-xs text-stone-400 space-y-1">
-        <p class="font-semibold text-stone-500">Quick Test Accounts:</p>
-        <div class="flex justify-between">
-          <span>Customer: <code class="bg-white px-1 py-0.5 rounded border border-stone-100">user@craftedlove.com</code></span>
-          <span>Pass: <code class="bg-white px-1 py-0.5 rounded border border-stone-100">user123</code></span>
-        </div>
-        <div class="flex justify-between">
-          <span>Admin: <code class="bg-white px-1 py-0.5 rounded border border-stone-100">admin@craftedlove.com</code></span>
-          <span>Pass: <code class="bg-white px-1 py-0.5 rounded border border-stone-100">admin123</code></span>
-        </div>
-      </div>
 
     </div>
   </div>
