@@ -2,7 +2,7 @@
   <div class="space-y-16 pb-16">
     
     <!-- STAGGERED DYNAMIC ACCORDION PANELS -->
-    <section class="relative bg-stone-50 overflow-hidden">
+    <section class="relative bg-[#FBF7F2] overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pb-16">
         <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
           <span class="text-xs uppercase tracking-widest font-semibold text-rose-500 bg-rose-50 px-3 py-1 rounded-full">Artisanal Gallery</span>
@@ -146,7 +146,7 @@
     </section>
 
     <!-- CURATED SHOWCASE (FEATURED PRODUCTS) -->
-    <section class="bg-stone-50/50 py-16">
+    <section class="bg-[#FBF7F2]/80 py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-10 gap-4">
           <div>
@@ -167,7 +167,7 @@
             class="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:shadow-xl hover:border-stone-200/60 transition-all duration-300 flex flex-col"
           >
             <!-- Thumbnail -->
-            <div class="aspect-square bg-stone-50 overflow-hidden relative">
+            <div class="aspect-square bg-[#FBF7F2] overflow-hidden relative">
               <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-stone-800 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
                 {{ product.category }}
@@ -216,7 +216,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         <!-- Testimonial 1 -->
-        <div class="p-6 sm:p-8 bg-stone-50 rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">
@@ -233,7 +233,7 @@
         </div>
 
         <!-- Testimonial 2 -->
-        <div class="p-6 sm:p-8 bg-stone-50 rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">
@@ -250,7 +250,7 @@
         </div>
 
         <!-- Testimonial 3 -->
-        <div class="p-6 sm:p-8 bg-stone-50 rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">

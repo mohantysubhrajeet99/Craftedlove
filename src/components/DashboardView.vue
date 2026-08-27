@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Redirect if not logged in -->
-    <div v-if="!store.currentUser" class="flex flex-col items-center justify-center py-20 text-center bg-stone-50 rounded-2xl border border-stone-100">
+    <div v-if="!store.currentUser" class="flex flex-col items-center justify-center py-20 text-center bg-[#FBF7F2] rounded-2xl border border-stone-100">
       <svg class="w-16 h-16 text-stone-600 mb-4 animate-bounce" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z"/></svg>
       <h2 class="text-xl font-bold text-stone-700">Account Access Required</h2>
       <p class="text-stone-700 text-sm mt-1 max-w-sm">Please log in or register to view your order history and live shipping trackers.</p>
@@ -199,7 +199,7 @@
               
               <div class="border border-stone-50 rounded-2xl overflow-hidden divide-y divide-stone-50">
                 <div v-for="item in selectedOrder.items" :key="item.product.id" class="flex gap-4 p-3 items-center bg-white">
-                  <img :src="item.product.image" :alt="item.product.name" class="w-12 h-12 rounded-lg object-cover bg-stone-50 flex-shrink-0" />
+                  <img :src="item.product.image" :alt="item.product.name" class="w-12 h-12 rounded-lg object-cover bg-[#FBF7F2] flex-shrink-0" />
                   <div class="flex-grow text-xs sm:text-sm">
                     <h4 class="font-bold text-stone-850 line-clamp-1 leading-snug">{{ item.product.name }}</h4>
                     <p class="text-stone-700 mt-0.5">{{ item.product.category }} — Qty: {{ item.quantity }}</p>
@@ -214,7 +214,7 @@
               <!-- Address -->
               <div class="space-y-1.5 text-xs sm:text-sm">
                 <h4 class="font-serif text-xs font-semibold uppercase tracking-wider text-stone-500">Shipping To</h4>
-                <div class="text-stone-450 space-y-0.5 bg-stone-50 rounded-2xl p-4">
+                <div class="text-stone-450 space-y-0.5 bg-[#FBF7F2] rounded-2xl p-4">
                   <p class="font-bold text-stone-700">{{ selectedOrder.userName }}</p>
                   <p>{{ selectedOrder.shippingDetails.address }}</p>
                   <p>{{ selectedOrder.shippingDetails.city }}, {{ selectedOrder.shippingDetails.zip }}</p>

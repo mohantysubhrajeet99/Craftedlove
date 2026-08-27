@@ -2,11 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+body, #app {
   overflow-x: hidden;
   scroll-behavior: smooth;
-  background-color: #FBF7F2; /* warm cream background */
-  color: #1c1917; /* near-black default text - stone-900 */
+  background-color: #FBF7F2 !important; /* warm cream */
+  color: #1c1917;
+}
+
+/* Force any lingering stone-50 backgrounds to cream */
+.bg-stone-50 {
+  background-color: #FBF7F2 !important;
 }
 
 /* Make muted/grey text readable - override stone-300/400/500 to darker tones */

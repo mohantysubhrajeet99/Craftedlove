@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Redirect if not admin -->
-    <div v-if="!store.currentUser || !store.currentUser.isAdmin" class="flex flex-col items-center justify-center py-20 text-center bg-stone-50 rounded-2xl border border-stone-100">
+    <div v-if="!store.currentUser || !store.currentUser.isAdmin" class="flex flex-col items-center justify-center py-20 text-center bg-[#FBF7F2] rounded-2xl border border-stone-100">
       <svg class="w-16 h-16 text-rose-500 mb-4 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
       <h2 class="text-xl font-bold text-stone-700">Administrative Access Denied</h2>
       <p class="text-stone-400 text-sm mt-1 max-w-sm">Please log in as the Store Owner to access product inventory management and order fulfillment tools.</p>
@@ -95,7 +95,7 @@
               <tr v-for="product in store.products" :key="product.id" class="hover:bg-stone-50/30 transition-colors">
                 <!-- Thumbnail & Name -->
                 <td class="p-4 flex items-center gap-3">
-                  <img :src="product.image" class="w-12 h-12 rounded-lg object-cover bg-stone-50 flex-shrink-0" />
+                  <img :src="product.image" class="w-12 h-12 rounded-lg object-cover bg-[#FBF7F2] flex-shrink-0" />
                   <div>
                     <h4 class="font-bold text-stone-850 line-clamp-1">{{ product.name }}</h4>
                     <span class="text-[10px] text-stone-400 font-mono">ID: #{{ product.id }}</span>
@@ -178,7 +178,7 @@
               <!-- Items list -->
               <div class="md:col-span-1 space-y-2">
                 <p class="font-semibold text-stone-400 uppercase tracking-wider text-[10px]">Purchased Items</p>
-                <ul class="space-y-1 bg-stone-50 p-3 rounded-xl">
+                <ul class="space-y-1 bg-[#FBF7F2] p-3 rounded-xl">
                   <li v-for="item in order.items" :key="item.product.id" class="flex justify-between items-center text-xs">
                     <span class="font-medium text-stone-700 truncate max-w-[150px]">{{ item.product.name }}</span>
                     <span class="text-stone-400">x{{ item.quantity }}</span>
@@ -286,7 +286,7 @@
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Product Photos (Upload Multiple)</label>
               <div class="flex items-center gap-3">
-                <label class="flex-grow flex items-center justify-center gap-1.5 py-2.5 px-4 bg-stone-50 border border-dashed border-stone-300 rounded-xl cursor-pointer hover:bg-stone-100 hover:border-stone-400 transition-colors text-stone-600 text-xs font-semibold">
+                <label class="flex-grow flex items-center justify-center gap-1.5 py-2.5 px-4 bg-[#FBF7F2] border border-dashed border-stone-300 rounded-xl cursor-pointer hover:bg-stone-100 hover:border-stone-400 transition-colors text-stone-600 text-xs font-semibold">
                   <svg class="w-4 h-4 text-stone-550" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
                   <span>Select Photo Files</span>
                   <input 
@@ -402,7 +402,7 @@
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-1">Product Photos (Upload Multiple)</label>
               <div class="flex items-center gap-3">
-                <label class="flex-grow flex items-center justify-center gap-1.5 py-2.5 px-4 bg-stone-50 border border-dashed border-stone-300 rounded-xl cursor-pointer hover:bg-stone-100 hover:border-stone-400 transition-colors text-stone-600 text-xs font-semibold">
+                <label class="flex-grow flex items-center justify-center gap-1.5 py-2.5 px-4 bg-[#FBF7F2] border border-dashed border-stone-300 rounded-xl cursor-pointer hover:bg-stone-100 hover:border-stone-400 transition-colors text-stone-600 text-xs font-semibold">
                   <svg class="w-4 h-4 text-stone-550" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
                   <span>Select Photo Files</span>
                   <input 

@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-stone-100">
+  <header class="sticky top-0 z-40 bg-[#FBF7F2]/90 backdrop-blur-md border-b border-stone-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 sm:h-20">
         
@@ -104,7 +104,7 @@
             
             <!-- Empty State -->
             <div v-if="store.cart.length === 0" class="text-center py-16 space-y-4">
-              <div class="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto text-stone-300">
+              <div class="w-16 h-16 bg-[#FBF7F2] rounded-full flex items-center justify-center mx-auto text-stone-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg>
@@ -119,7 +119,7 @@
             <!-- Items List -->
             <div v-else class="space-y-4">
               <div v-for="item in store.cart" :key="item.product.id" class="flex gap-4 pb-4 border-b border-stone-100 last:border-0">
-                <img :src="item.product.image" :alt="item.product.name" class="w-16 h-16 rounded-xl object-cover bg-stone-50 flex-shrink-0" />
+                <img :src="item.product.image" :alt="item.product.name" class="w-16 h-16 rounded-xl object-cover bg-[#FBF7F2] flex-shrink-0" />
                 
                 <!-- Product Details -->
                 <div class="flex-grow flex flex-col justify-between">
@@ -130,7 +130,7 @@
                   
                   <!-- Quantity Controller -->
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center border border-stone-100 rounded-lg overflow-hidden bg-stone-50 text-sm">
+                    <div class="flex items-center border border-stone-100 rounded-lg overflow-hidden bg-[#FBF7F2] text-sm">
                       <button @click="store.updateCartQuantity(item.product.id, item.quantity - 1)" class="px-2.5 py-1 text-stone-400 hover:text-stone-850 hover:bg-stone-100 transition-colors">-</button>
                       <span class="px-2 font-medium text-stone-700 min-w-[20px] text-center">{{ item.quantity }}</span>
                       <button @click="store.updateCartQuantity(item.product.id, item.quantity + 1)" class="px-2.5 py-1 text-stone-400 hover:text-stone-850 hover:bg-stone-100 transition-colors">+</button>
@@ -151,7 +151,7 @@
           </div>
 
           <!-- Drawer Footer (Sticky Checkout) -->
-          <div v-if="store.cart.length > 0" class="p-5 border-t border-stone-100 bg-stone-50 space-y-4">
+          <div v-if="store.cart.length > 0" class="p-5 border-t border-stone-100 bg-[#FBF7F2] space-y-4">
             
             <div class="space-y-1.5 text-sm text-stone-500">
               <div class="flex justify-between">

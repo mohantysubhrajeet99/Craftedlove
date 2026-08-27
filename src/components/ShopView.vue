@@ -82,7 +82,7 @@
       <div class="lg:col-span-3">
         
         <!-- Empty State -->
-        <div v-if="filteredProducts.length === 0" class="flex flex-col items-center justify-center py-20 bg-stone-50 rounded-2xl border border-stone-100 text-center">
+        <div v-if="filteredProducts.length === 0" class="flex flex-col items-center justify-center py-20 bg-[#FBF7F2] rounded-2xl border border-stone-100 text-center">
           <svg class="w-12 h-12 text-stone-600 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25m-2.25-2.25l-2.25 2.25m2.25-2.25l2.25-2.25M3.75 7.5h16.5M9 3.75h6m-6 3a3 3 0 016 0M4 7.5L3 5.5a1.5 1.5 0 011.5-1.5h15A1.5 1.5 0 0121 5.5l-1 2"/></svg>
           <h3 class="font-bold text-stone-700 text-lg">No products found</h3>
           <p class="text-sm text-stone-700 mt-1 px-8">Try adjusting your filters or searching for something else.</p>
@@ -99,7 +99,7 @@
           >
             
             <!-- Thumbnail -->
-            <div class="aspect-square bg-stone-50 overflow-hidden relative cursor-pointer" @click="openDetail(product)">
+            <div class="aspect-square bg-[#FBF7F2] overflow-hidden relative cursor-pointer" @click="openDetail(product)">
               <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
               
               <!-- Category Badge -->
@@ -174,12 +174,12 @@
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative animate-slideUp">
           
           <!-- Close Modal -->
-          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-700 hover:text-stone-600 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-stone-50 transition-colors z-10 border border-stone-100 shadow-sm">
+          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-700 hover:text-stone-600 p-2 rounded-full bg-[#FBF7F2]/80 backdrop-blur-sm hover:bg-stone-50 transition-colors z-10 border border-stone-100 shadow-sm">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
 
           <!-- Left: Interactive Image Gallery -->
-          <div class="w-full md:w-1/2 bg-stone-50 flex flex-col justify-between p-4 space-y-4">
+          <div class="w-full md:w-1/2 bg-[#FBF7F2] flex flex-col justify-between p-4 space-y-4">
             <!-- Active Image View -->
             <div class="flex-grow rounded-2xl overflow-hidden relative bg-stone-100 min-h-[250px] md:min-h-[380px] h-[300px] md:h-auto">
               <img 
@@ -253,7 +253,7 @@
               <!-- Purchase Quantity Selector -->
               <div v-if="selectedProduct.inventory > 0" class="flex items-center gap-4 pt-2">
                 <span class="text-sm font-semibold text-stone-600">Quantity</span>
-                <div class="flex items-center border border-stone-200 rounded-xl overflow-hidden bg-stone-50">
+                <div class="flex items-center border border-stone-200 rounded-xl overflow-hidden bg-[#FBF7F2]">
                   <button 
                     @click="modalQuantity = Math.max(1, modalQuantity - 1)" 
                     class="px-3.5 py-1.5 text-stone-700 hover:text-stone-700 hover:bg-stone-100 transition-colors font-semibold"
