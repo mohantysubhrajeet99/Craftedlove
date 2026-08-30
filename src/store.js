@@ -481,6 +481,31 @@ export const store = reactive({
     return null;
   },
 
+  async adminDeleteCustomer(email) {
+    if (!this.currentUser?.isAdmin) return { success: false };
+    try {
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        this.users = this.users.filter(user => user.email.toLowerCase() !== email.toLowerCase());
+        this.orders = this.orders.filter(order => order.userEmail.toLowerCase() !== email.toLowerCase());
+        if (this.selectedCustomerDetails?.customer?.email?.toLowerCase() === email.toLowerCase()) {
+          this.selectedCustomerDetails = null;
+        }
+        await this.fetchAdminCustomers();
+        await this.fetchCustomerInsights();
+        await this.fetchAnalytics();
+        this.addToast(`Customer deleted with ${data.deleted?.orders || 0} order(s).`, 'info');
+        return { success: true, deleted: data.deleted };
+      }
+      this.addToast(data.error || 'Failed to delete customer.', 'error');
+      return { success: false, message: data.error };
+    } catch (e) {
+      this.addToast('Failed to delete customer.', 'error');
+      return { success: false };
+    }
+  },
+
   async trackEvent(type, payload = {}) {
     try {
       const body = {

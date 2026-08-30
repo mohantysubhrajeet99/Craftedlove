@@ -4,7 +4,7 @@
       <div class="flex items-center justify-between h-16 sm:h-20">
         
         <!-- Logo -->
-        <div class="flex-shrink-0 flex flex-col justify-center cursor-pointer" @click="handleNav('home')">
+        <div class="flex-shrink-0 flex flex-col justify-center cursor-pointer" @click="handleLogoClick">
           <span class="font-serif text-2xl sm:text-3xl font-bold bg-gradient-to-r from-rose-500 via-pink-650 to-indigo-650 bg-clip-text text-transparent flex items-center gap-1.5 leading-none">
             KraftedLove
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="none" class="w-5 h-5 sm:w-6 sm:h-6 text-rose-500 animate-pulse flex-shrink-0">
@@ -15,7 +15,7 @@
         </div>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center space-x-8 font-medium text-stone-600 text-[15px]">
+        <nav v-if="!isAdminUser" class="hidden md:flex items-center space-x-8 font-medium text-stone-600 text-[15px]">
           <a @click="handleNav('home')" :class="currentView === 'home' ? 'text-rose-500 font-semibold' : 'hover:text-rose-500'" class="cursor-pointer transition-colors duration-200">Home</a>
           <a @click="handleNav('shop')" :class="currentView === 'shop' ? 'text-rose-500 font-semibold' : 'hover:text-rose-500'" class="cursor-pointer transition-colors duration-200">Shop</a>
           <a @click="handleNav('about')" :class="currentView === 'about' ? 'text-rose-500 font-semibold' : 'hover:text-rose-500'" class="cursor-pointer transition-colors duration-200">About</a>
@@ -24,8 +24,16 @@
 
         <!-- Right Utility Icons -->
         <div class="flex items-center space-x-3 sm:space-x-5">
+          <button
+            v-if="isAdminUser"
+            @click="handleLogout"
+            class="px-5 py-2.5 bg-white border border-stone-200 text-stone-700 hover:text-rose-600 hover:border-rose-200 rounded-full text-sm font-semibold shadow-sm transition-colors"
+          >
+            Log Out
+          </button>
+
           <!-- Account -->
-          <div class="relative">
+          <div v-if="!isAdminUser" class="relative">
             <button @click="store.currentUser ? toggleProfile() : openAuth()" class="flex items-center gap-1.5 p-2 rounded-full hover:bg-stone-50 text-stone-700 transition-colors" aria-label="User Profile">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -46,7 +54,7 @@
           </div>
 
           <!-- Cart Trigger -->
-          <button @click="toggleCart" class="relative p-2 rounded-full hover:bg-stone-50 text-stone-700 transition-colors" aria-label="Open Cart">
+          <button v-if="!isAdminUser" @click="toggleCart" class="relative p-2 rounded-full hover:bg-stone-50 text-stone-700 transition-colors" aria-label="Open Cart">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
@@ -57,7 +65,7 @@
           </button>
 
           <!-- Mobile Menu Toggle -->
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-full hover:bg-stone-50 text-stone-700 transition-colors" aria-label="Toggle Menu">
+          <button v-if="!isAdminUser" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-full hover:bg-stone-50 text-stone-700 transition-colors" aria-label="Toggle Menu">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6" v-if="!mobileMenuOpen">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
@@ -71,7 +79,7 @@
     </div>
 
     <!-- Mobile Dropdown Navigation -->
-    <div v-show="mobileMenuOpen" class="md:hidden border-t border-stone-100 bg-white shadow-inner animate-fadeIn">
+    <div v-if="!isAdminUser" v-show="mobileMenuOpen" class="md:hidden border-t border-stone-100 bg-white shadow-inner animate-fadeIn">
       <div class="px-2 pt-3 pb-4 space-y-1 sm:px-3 text-base">
         <a @click="handleNav('home')" :class="currentView === 'home' ? 'bg-rose-50 text-rose-600 font-semibold' : 'text-stone-600 hover:bg-stone-50'" class="block px-4 py-2.5 rounded-xl cursor-pointer">Home</a>
         <a @click="handleNav('shop')" :class="currentView === 'shop' ? 'bg-rose-50 text-rose-600 font-semibold' : 'text-stone-600 hover:bg-stone-50'" class="block px-4 py-2.5 rounded-xl cursor-pointer">Shop</a>
@@ -82,7 +90,7 @@
 
     <!-- Cart Drawer Overlay -->
     <teleport to="body">
-      <div v-if="cartOpen" @click.self="toggleCart" class="fixed inset-0 bg-stone-950/45 backdrop-blur-md z-50 transition-opacity duration-300">
+      <div v-if="!isAdminUser && cartOpen" @click.self="toggleCart" class="fixed inset-0 bg-stone-950/45 backdrop-blur-md z-50 transition-opacity duration-300">
         <!-- Drawer Panel -->
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col h-full animate-slideIn">
           
@@ -222,10 +230,26 @@ export default {
   computed: {
     store() {
       return store;
+    },
+    isAdminUser() {
+      return Boolean(store.currentUser?.isAdmin);
     }
   },
   methods: {
+    handleLogoClick() {
+      if (this.isAdminUser) {
+        this.setView('admin');
+        return;
+      }
+      this.handleNav('home');
+    },
     handleNav(view) {
+      if (this.isAdminUser && view !== 'admin' && view !== 'analytics') {
+        this.setView('admin');
+        this.mobileMenuOpen = false;
+        this.profileDropdownOpen = false;
+        return;
+      }
       this.store.trackEvent('nav_click', { page: view === 'home' ? '/' : `/${view}` });
       this.setView(view);
       this.mobileMenuOpen = false;

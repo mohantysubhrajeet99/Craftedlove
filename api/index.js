@@ -569,6 +569,37 @@ app.get('/api/admin/users/:email', async (req, res) => {
   }
 });
 
+app.delete('/api/admin/users/:email', async (req, res) => {
+  try {
+    await cleanupProductionDemoData();
+    const email = decodeURIComponent(req.params.email).trim().toLowerCase();
+    if (!email || demoCustomerEmails.includes(email)) {
+      return res.status(400).json({ error: 'Customer cannot be deleted.' });
+    }
+
+    const emailMatcher = { $regex: new RegExp(`^${escapeRegex(email)}$`, 'i') };
+    const user = await User.findOneAndDelete({
+      email: emailMatcher,
+      isAdmin: false
+    });
+    if (!user) return res.status(404).json({ error: 'Customer not found' });
+
+    const ordersResult = await Order.deleteMany({ userEmail: emailMatcher });
+    const analyticsResult = await AnalyticsEvent.deleteMany({ userEmail: emailMatcher });
+
+    res.json({
+      message: 'Customer deleted successfully',
+      deleted: {
+        customer: 1,
+        orders: ordersResult.deletedCount || 0,
+        analyticsEvents: analyticsResult.deletedCount || 0
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/admin/customer-insights', async (req, res) => {
   try {
     await cleanupProductionDemoData();

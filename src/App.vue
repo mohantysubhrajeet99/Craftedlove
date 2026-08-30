@@ -525,7 +525,10 @@ export default {
       this.currentView = 'about';
     } else if (path === '/dashboard') {
       this.showIntro = false;
-      this.currentView = 'dashboard';
+      this.currentView = this.store.currentUser?.isAdmin ? 'admin' : 'dashboard';
+      if (this.store.currentUser?.isAdmin) {
+        window.history.replaceState(null, '', '/admin');
+      }
     } else if (path === '/analytics') {
       this.showIntro = false;
       this.currentView = 'analytics';
@@ -775,6 +778,9 @@ export default {
       }
     },
     setView(view) {
+      if (this.store.currentUser?.isAdmin && view === 'dashboard') {
+        view = 'admin';
+      }
       this.currentView = view;
       window.scrollTo({ top: 0, behavior: 'smooth' });
       
@@ -812,7 +818,10 @@ export default {
         this.currentView = 'about';
     } else if (path === '/dashboard') {
       this.showIntro = false;
-      this.currentView = 'dashboard';
+      this.currentView = this.store.currentUser?.isAdmin ? 'admin' : 'dashboard';
+      if (this.store.currentUser?.isAdmin) {
+        window.history.replaceState(null, '', '/admin');
+      }
     } else if (path === '/analytics') {
       this.showIntro = false;
       this.currentView = 'analytics';

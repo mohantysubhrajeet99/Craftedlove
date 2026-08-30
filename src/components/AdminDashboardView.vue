@@ -436,7 +436,15 @@
                   <p class="text-sm text-stone-500">{{ store.selectedCustomerDetails.customer.email }}</p>
                   <p class="text-sm text-stone-500">{{ store.selectedCustomerDetails.customer.phone || 'Phone not available' }}</p>
                 </div>
-                <span class="w-max text-xs font-bold uppercase rounded-full px-3 py-1 bg-rose-100 text-rose-600">{{ store.selectedCustomerDetails.customer.valueLabel }}</span>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="w-max text-xs font-bold uppercase rounded-full px-3 py-1 bg-rose-100 text-rose-600">{{ store.selectedCustomerDetails.customer.valueLabel }}</span>
+                  <button
+                    @click="deleteCustomer(store.selectedCustomerDetails.customer)"
+                    class="px-3 py-1.5 rounded-full border border-rose-200 bg-white text-rose-600 hover:bg-rose-50 text-xs font-bold transition-colors"
+                  >
+                    Delete Customer
+                  </button>
+                </div>
               </div>
 
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -1125,6 +1133,25 @@ export default {
     async selectCustomer(email) {
       this.selectedCustomerEmail = email;
       await this.store.fetchCustomerDetails(email);
+    },
+    async deleteCustomer(customer) {
+      if (!customer?.email) return;
+      const orderText = customer.orderCount === 1 ? '1 order' : `${customer.orderCount || 0} orders`;
+      const confirmed = confirm(`Delete ${customer.name} (${customer.email})?\n\nThis will permanently delete the customer account, ${orderText}, and related analytics data. This cannot be undone.`);
+      if (!confirmed) return;
+
+      const deletedEmail = customer.email;
+      const result = await this.store.adminDeleteCustomer(deletedEmail);
+      if (!result.success) return;
+
+      this.selectedCustomerEmail = '';
+      const nextCustomer = this.store.users.find(user => user.email.toLowerCase() !== deletedEmail.toLowerCase());
+      if (nextCustomer) {
+        await this.selectCustomer(nextCustomer.email);
+      } else {
+        this.store.selectedCustomerDetails = null;
+      }
+      await this.store.fetchOrders();
     },
     productCountForCategory(category) {
       return this.store.products.filter(product => product.category === category).length;
