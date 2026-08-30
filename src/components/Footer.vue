@@ -1,10 +1,10 @@
 <template>
 <footer class="bg-stone-900 text-stone-300 border-t border-stone-850">
     <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-12">
+      <div class="flex flex-col md:flex-row md:justify-between items-start gap-8 sm:gap-12">
         
         <!-- Column 1: Brand Info -->
-        <div class="space-y-4 md:col-span-1">
+        <div class="space-y-4 max-w-sm">
           <span class="font-serif text-2xl font-bold bg-gradient-to-r from-rose-450 to-pink-500 bg-clip-text text-transparent flex items-center gap-1.5 cursor-pointer" @click="setView('home')">
             KraftedLove
           </span>
@@ -13,13 +13,7 @@
           </p>
           <div class="flex items-center space-x-3 text-stone-400 pt-2">
             <a href="#" class="hover:text-rose-400 transition-colors" aria-label="Instagram">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
-            </a>
-            <a href="#" class="hover:text-rose-400 transition-colors" aria-label="Facebook">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-            </a>
-            <a href="#" class="hover:text-rose-400 transition-colors" aria-label="Pinterest">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 22a9 9 0 01-1.9-8.4c.5-2.2 2-7.5 4.3-10a6 6 0 018.6.6c2.3 2.5 1.5 6.9-.6 8.5a3 3 0 01-3.7-.4c-.4-.4-1.2-1.5-1.2-1.5s-.6 2.3-1 3.5c-.7 2-2 4.1-2 4.1z"/></svg>
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
             </a>
           </div>
         </div>
@@ -52,29 +46,6 @@
               <span>+1 (503) 555-0199</span>
             </li>
           </ul>
-        </div>
-
-        <!-- Column 4: Newsletter -->
-        <div class="space-y-4">
-          <h3 class="font-serif text-lg font-semibold text-white">Join the Family</h3>
-          <p class="text-sm text-stone-300 leading-relaxed">
-            Subscribe to receive studio updates, new product collection launches, and a **10% discount** code.
-          </p>
-          <form @submit.prevent="handleNewsletter" class="flex flex-col sm:flex-row gap-2 mt-2">
-            <input 
-              type="email" 
-              v-model="email" 
-              placeholder="Enter your email" 
-              class="px-4 py-2 text-stone-800 bg-white border border-stone-200 rounded-full focus:outline-none focus:ring-2 focus:ring-rose-500/20 text-sm flex-grow"
-              required
-            />
-            <button 
-              type="submit" 
-              class="px-5 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-full text-sm shadow-md shadow-rose-500/10 active:scale-95 transition-all flex-shrink-0"
-            >
-              Join
-            </button>
-          </form>
         </div>
 
       </div>
