@@ -404,7 +404,10 @@ export default {
       return store;
     },
     categories() {
-      return ['All', 'Resin Art', 'Glass Art', 'Frames', 'Accessories', 'Chocolates'];
+      const base = ['All', 'Resin Art', 'Glass Art', 'Frames', 'Accessories', 'Chocolates'];
+      const fromProducts = this.store.products.map(p => p.category).filter(Boolean);
+      const allUnique = new Set([...base, ...fromProducts]);
+      return Array.from(allUnique);
     },
     filteredProducts() {
       let result = [...this.store.products];

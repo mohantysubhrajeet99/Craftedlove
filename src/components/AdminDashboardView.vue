@@ -20,9 +20,6 @@
           </h1>
           <p class="text-sm text-stone-400 mt-1">Configure product pricing, manage stock, and progress delivery tracking pipelines.</p>
         </div>
-        <button @click="store.resetStore(); setView('home')" class="text-xs font-semibold text-rose-500 border border-rose-200 px-4 py-2 rounded-full hover:bg-rose-50/50 bg-white transition-colors shadow-sm">
-          Reset Demo Database
-        </button>
       </div>
 
       <!-- STATS OVERVIEW CARDS -->
@@ -273,12 +270,20 @@
                   v-model="productForm.category"
                   class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none text-stone-700 cursor-pointer"
                 >
-                  <option value="Resin Art">Resin Art</option>
-                  <option value="Glass Art">Glass Art</option>
-                  <option value="Frames">Frames</option>
-                  <option value="Accessories">Accessories</option>
-                  <option value="Chocolates">Chocolates</option>
+                  <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                  <option value="__new__">+ Add New Category...</option>
                 </select>
+
+                <!-- Custom Category Input -->
+                <div v-if="productForm.category === '__new__'" class="mt-2 space-y-1">
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-rose-500">New Category Name</label>
+                  <input 
+                    type="text" 
+                    v-model="customCategory" 
+                    placeholder="e.g., Clay Art"
+                    class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/10 text-stone-850"
+                  />
+                </div>
               </div>
             </div>
 
@@ -389,12 +394,20 @@
                   v-model="editingProduct.category"
                   class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none text-stone-700 cursor-pointer"
                 >
-                  <option value="Resin Art">Resin Art</option>
-                  <option value="Glass Art">Glass Art</option>
-                  <option value="Frames">Frames</option>
-                  <option value="Accessories">Accessories</option>
-                  <option value="Chocolates">Chocolates</option>
+                  <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                  <option value="__new__">+ Add New Category...</option>
                 </select>
+
+                <!-- Custom Category Input -->
+                <div v-if="editingProduct.category === '__new__'" class="mt-2 space-y-1">
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-rose-500">New Category Name</label>
+                  <input 
+                    type="text" 
+                    v-model="customCategoryEdit" 
+                    placeholder="e.g., Clay Art"
+                    class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/10 text-stone-850"
+                  />
+                </div>
               </div>
             </div>
 
@@ -508,12 +521,20 @@ export default {
         description: ''
       },
       formError: '',
-      customTimelineNote: ''
+      customTimelineNote: '',
+      customCategory: '',
+      customCategoryEdit: ''
     };
   },
   computed: {
     store() {
       return store;
+    },
+    categories() {
+      const base = ['Resin Art', 'Glass Art', 'Frames', 'Accessories', 'Chocolates'];
+      const fromProducts = this.store.products.map(p => p.category).filter(Boolean);
+      const allUnique = new Set([...base, ...fromProducts]);
+      return Array.from(allUnique);
     },
     totalSales() {
       return parseFloat(this.store.orders.reduce((sum, o) => sum + o.total, 0).toFixed(2));
@@ -550,6 +571,7 @@ export default {
         ...product,
         images: product.images ? [...product.images] : (product.image ? [product.image] : [])
       };
+      this.customCategoryEdit = '';
       this.formError = '';
     },
     saveEdit() {
@@ -558,13 +580,23 @@ export default {
         return;
       }
       
+      if (this.editingProduct.category === '__new__') {
+        if (!this.customCategoryEdit.trim()) {
+          this.formError = 'Please specify a name for the new category.';
+          return;
+        }
+        this.editingProduct.category = this.customCategoryEdit.trim();
+      }
+      
       const success = this.store.adminUpdateProduct(this.editingProduct);
       if (success) {
         this.editingProduct = null;
+        this.customCategoryEdit = '';
       }
     },
     cancelEdit() {
       this.editingProduct = null;
+      this.customCategoryEdit = '';
       this.formError = '';
     },
     deleteProduct(id) {
@@ -583,6 +615,7 @@ export default {
         images: [],
         description: ''
       };
+      this.customCategory = '';
       this.formError = '';
     },
     saveAdd() {
@@ -592,11 +625,21 @@ export default {
         return;
       }
 
+      if (f.category === '__new__') {
+        if (!this.customCategory.trim()) {
+          this.formError = 'Please specify a name for the new category.';
+          return;
+        }
+        f.category = this.customCategory.trim();
+      }
+
       this.store.adminAddProduct(f);
       this.addingProduct = false;
+      this.customCategory = '';
     },
     cancelAdd() {
       this.addingProduct = false;
+      this.customCategory = '';
       this.formError = '';
     },
     advanceOrderStatus(orderId, status) {
