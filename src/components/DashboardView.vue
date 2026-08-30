@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-8">
     
     <!-- Redirect if not logged in -->
     <div v-if="!store.currentUser" class="flex flex-col items-center justify-center py-20 text-center bg-[#FBF7F2] rounded-2xl border border-stone-100">

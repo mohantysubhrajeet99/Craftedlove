@@ -14,7 +14,7 @@
         v-if="showText" 
         class="absolute bottom-24 text-center space-y-1.5 animate-[textFadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]"
       >
-        <h2 class="font-serif text-3xl font-bold bg-gradient-to-r from-rose-400 via-pink-500 to-blue-400 bg-clip-text text-transparent">CraftedLove</h2>
+        <h2 class="font-serif text-3xl font-bold bg-gradient-to-r from-rose-400 via-pink-500 to-blue-400 bg-clip-text text-transparent">KraftedLove</h2>
         <p class="text-xs text-stone-400 font-semibold tracking-widest uppercase">Handcrafted with Heart</p>
       </div>
 
@@ -28,7 +28,9 @@
     </div>
 
     <!-- Main Website Shell -->
-    <div class="min-h-screen flex flex-col font-sans select-none" style="background-color: #FBF7F2;">
+    <div class="min-h-screen flex flex-col font-sans select-none relative" style="background-color: #FBF7F2;">
+      <!-- Fixed background particle canvas -->
+      <canvas ref="bgCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
     
     <!-- NAVBAR -->
     <Navbar 
@@ -56,7 +58,7 @@
     </div>
 
     <!-- MAIN ROUTED COMPONENT -->
-    <main class="flex-grow animate-fadeIn">
+    <main class="flex-grow animate-fadeIn relative z-10">
       <HomeView 
         v-if="currentView === 'home'" 
         :setView="setView"
@@ -82,7 +84,7 @@
     </main>
 
     <!-- FOOTER -->
-    <Footer :setView="setView" />
+    <Footer :setView="setView" class="relative z-10" />
 
     <!-- AUTH MODAL -->
     <AuthModal 
@@ -235,6 +237,108 @@ import DashboardView from './components/DashboardView.vue';
 import AdminDashboardView from './components/AdminDashboardView.vue';
 import AuthModal from './components/AuthModal.vue';
 
+// Background Particle Class Design
+class BgParticle {
+  constructor(canvasWidth, canvasHeight) {
+    this.reset(canvasWidth, canvasHeight, true);
+  }
+
+  reset(width, height, initial = false) {
+    this.x = initial ? Math.random() * width : (Math.random() > 0.5 ? -30 : width + 30);
+    this.y = Math.random() * height;
+    
+    this.depth = 0.4 + Math.random() * 1.1; // 0.4 to 1.5 depth scale
+    this.size = (1.5 + Math.random() * 2.5) * this.depth;
+    
+    // Set base drift speed (vx) and bobbing speed (vy)
+    const direction = Math.random() > 0.5 ? 1 : -1;
+    this.vx = direction * (0.15 + Math.random() * 0.35) * this.depth;
+    this.vy = (Math.random() - 0.5) * 0.2 * this.depth;
+    
+    // Choose types: 60% circle, 20% star, 20% petal
+    const randType = Math.random();
+    if (randType < 0.6) {
+      this.type = 'circle';
+    } else if (randType < 0.8) {
+      this.type = 'star';
+    } else {
+      this.type = 'petal';
+    }
+    
+    const colors = ['#f43f5e', '#db2777', '#4f46e5', '#60a5fa', '#fbbf24', '#f59e0b', '#ec4899', '#ffffff'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Soft opacity for background usage so it does not interfere with readability
+    this.alpha = 0.12 + Math.random() * 0.28;
+    
+    this.noiseOffset = Math.random() * Math.PI * 2;
+    this.noiseSpeed = 0.004 + Math.random() * 0.008;
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  update(width, height, mouse, time) {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotSpeed;
+    
+    // Bobbing wave vertical drift
+    this.y += Math.sin(time * this.noiseSpeed + this.noiseOffset) * 0.05 * this.depth;
+    
+    // Mouse avoidance calculation
+    if (mouse.active && mouse.x !== null && mouse.y !== null) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      
+      if (dist < 180) {
+        const force = (180 - dist) / 180;
+        const angle = Math.atan2(dy, dx);
+        
+        // Push away with depth scaling
+        const pushX = Math.cos(angle) * force * 3.0 * this.depth;
+        const pushY = Math.sin(angle) * force * 3.0 * this.depth;
+        
+        this.x += pushX;
+        this.y += pushY;
+      }
+    }
+    
+    // Out of bounds reset
+    if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
+      this.reset(width, height, false);
+    }
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    
+    if (this.type === 'circle') {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.type === 'star') {
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y - this.size * 2);
+      ctx.quadraticCurveTo(this.x, this.y, this.x + this.size * 2, this.y);
+      ctx.quadraticCurveTo(this.x, this.y, this.x, this.y + this.size * 2);
+      ctx.quadraticCurveTo(this.x, this.y, this.x - this.size * 2, this.y);
+      ctx.quadraticCurveTo(this.x, this.y, this.x, this.y - this.size * 2);
+      ctx.closePath();
+      ctx.fill();
+    } else if (this.type === 'petal') {
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size * 1.6, this.size * 0.9, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
 // Particle Class Design for 3D Floating Particle Simulation
 class Particle {
   constructor(target, width, height) {
@@ -354,7 +458,11 @@ export default {
         cardCvv: ''
       },
       isCheckingOut: false,
-      checkoutError: ''
+      checkoutError: '',
+      bgParticles: [],
+      bgAnimFrameId: null,
+      bgAnimTime: 0,
+      bgMouse: { x: null, y: null, active: false }
     };
   },
   computed: {
@@ -368,6 +476,14 @@ export default {
     
     // Initialize full-stack database store
     this.store.init();
+
+    // Setup background particle canvas
+    this.resizeBgCanvas();
+    this.initBgParticles();
+    this.tickBg();
+    window.addEventListener('resize', this.resizeBgCanvas);
+    window.addEventListener('mousemove', this.handleBgMouseMove);
+    document.addEventListener('mouseleave', this.handleBgMouseLeave);
     
     // Set initial canvas sizing and build target shapes
     const path = window.location.pathname;
@@ -395,8 +511,15 @@ export default {
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
     window.removeEventListener('popstate', this.handlePopState);
+    window.removeEventListener('resize', this.resizeBgCanvas);
+    window.removeEventListener('mousemove', this.handleBgMouseMove);
+    document.removeEventListener('mouseleave', this.handleBgMouseLeave);
+    
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
+    }
+    if (this.bgAnimFrameId) {
+      cancelAnimationFrame(this.bgAnimFrameId);
     }
     this.timeouts.forEach(clearTimeout);
   },
@@ -700,10 +823,10 @@ export default {
     },
     setDemoRole(role) {
       if (role === 'admin') {
-        this.store.login('admin@craftedlove.com', 'admin123');
+        this.store.login('admin@kraftedlove.com', 'admin123');
         this.setView('admin');
       } else if (role === 'customer') {
-        this.store.login('user@craftedlove.com', 'user123');
+        this.store.login('user@kraftedlove.com', 'user123');
         this.setView('dashboard');
       } else if (role === 'logout') {
         this.store.logout();
@@ -713,6 +836,46 @@ export default {
         this.setView('home');
       }
       this.demoMenuOpen = false;
+    },
+    handleBgMouseMove(e) {
+      this.bgMouse.x = e.clientX;
+      this.bgMouse.y = e.clientY;
+      this.bgMouse.active = true;
+    },
+    handleBgMouseLeave() {
+      this.bgMouse.active = false;
+      this.bgMouse.x = null;
+      this.bgMouse.y = null;
+    },
+    resizeBgCanvas() {
+      const canvas = this.$refs.bgCanvas;
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    },
+    initBgParticles() {
+      const canvas = this.$refs.bgCanvas;
+      if (!canvas) return;
+      const particleCount = 100;
+      this.bgParticles = Array.from({ length: particleCount }, () => new BgParticle(canvas.width, canvas.height));
+    },
+    tickBg() {
+      const canvas = this.$refs.bgCanvas;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      if (!this.showIntro) {
+        this.bgAnimTime += 1;
+        this.bgParticles.forEach(p => {
+          p.update(canvas.width, canvas.height, this.bgMouse, this.bgAnimTime);
+          p.draw(ctx);
+        });
+      }
+      
+      this.bgAnimFrameId = requestAnimationFrame(this.tickBg);
     }
   }
 };

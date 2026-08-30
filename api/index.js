@@ -269,14 +269,14 @@ const DEFAULT_PRODUCTS = [
 ];
 
 const DEFAULT_USERS = [
-  { name: 'Store Owner', email: 'admin@craftedlove.com', password: 'admin123', isAdmin: true },
-  { name: 'Jane Doe', email: 'user@craftedlove.com', password: 'user123', isAdmin: false }
+  { name: 'Store Owner', email: 'admin@kraftedlove.com', password: 'admin123', isAdmin: true },
+  { name: 'Jane Doe', email: 'user@kraftedlove.com', password: 'user123', isAdmin: false }
 ];
 
 const DEFAULT_ORDERS = [
   {
     id: 'ORD-9874',
-    userEmail: 'user@craftedlove.com',
+    userEmail: 'user@kraftedlove.com',
     userName: 'Jane Doe',
     items: [
       {
@@ -436,7 +436,7 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email already exists' });
     }
 
-    const isAdmin = req.body.email.toLowerCase() === 'admin@craftedlove.com';
+    const isAdmin = req.body.email.toLowerCase() === 'admin@kraftedlove.com';
     const user = new User({
       name: req.body.name,
       email: req.body.email,
@@ -545,7 +545,7 @@ app.post('/api/reset', async (req, res) => {
 
 // Root handler
 app.get('/api', (req, res) => {
-  res.json({ name: 'Crafted Love serverless API', status: 'ready' });
+  res.json({ name: 'KraftedLove serverless API', status: 'ready' });
 });
 
 // Port binding for local standalone development

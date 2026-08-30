@@ -1,17 +1,17 @@
 <template>
   <header class="sticky top-0 z-40 bg-[#FBF7F2]/90 backdrop-blur-md border-b border-stone-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16">
       <div class="flex items-center justify-between h-16 sm:h-20">
         
         <!-- Logo -->
         <div class="flex-shrink-0 flex flex-col justify-center cursor-pointer" @click="handleNav('home')">
           <span class="font-serif text-2xl sm:text-3xl font-bold bg-gradient-to-r from-rose-500 via-pink-650 to-indigo-650 bg-clip-text text-transparent flex items-center gap-1.5 leading-none">
-            CraftedLove
+            KraftedLove
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="none" class="w-5 h-5 sm:w-6 sm:h-6 text-rose-500 animate-pulse flex-shrink-0">
               <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
           </span>
-          <span class="text-[10px] sm:text-[11px] text-stone-400 font-serif italic ml-0.5 mt-1 leading-none">by Sonali Dhupal</span>
+          <span class="text-[10px] sm:text-[11px] text-black font-serif italic ml-0.5 mt-1 leading-none">by Sonali Dhupal</span>
         </div>
 
         <!-- Desktop Navigation -->

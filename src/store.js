@@ -158,14 +158,14 @@ const DEFAULT_PRODUCTS = [
 ];
 
 const DEFAULT_USERS = [
-  { name: 'Store Owner', email: 'admin@craftedlove.com', password: 'admin123', isAdmin: true },
-  { name: 'Jane Doe', email: 'user@craftedlove.com', password: 'user123', isAdmin: false }
+  { name: 'Store Owner', email: 'admin@kraftedlove.com', password: 'admin123', isAdmin: true },
+  { name: 'Jane Doe', email: 'user@kraftedlove.com', password: 'user123', isAdmin: false }
 ];
 
 const DEFAULT_ORDERS = [
   {
     id: 'ORD-9874',
-    userEmail: 'user@craftedlove.com',
+    userEmail: 'user@kraftedlove.com',
     userName: 'Jane Doe',
     items: [
       {
@@ -199,7 +199,7 @@ const DEFAULT_ORDERS = [
 
 // Helper to load state from localStorage or use defaults
 const getStored = (key, fallback) => {
-  const val = localStorage.getItem(`craftedlove_${key}`);
+  const val = localStorage.getItem(`kraftedlove_${key}`);
   if (val) {
     try {
       return JSON.parse(val);
@@ -538,5 +538,5 @@ export const store = reactive({
 });
 
 // Watch changes and sync session keys with LocalStorage
-watch(() => store.currentUser, (newVal) => localStorage.setItem('craftedlove_currentUser', JSON.stringify(newVal)), { deep: true });
-watch(() => store.cart, (newVal) => localStorage.setItem('craftedlove_cart', JSON.stringify(newVal)), { deep: true });
+watch(() => store.currentUser, (newVal) => localStorage.setItem('kraftedlove_currentUser', JSON.stringify(newVal)), { deep: true });
+watch(() => store.cart, (newVal) => localStorage.setItem('kraftedlove_cart', JSON.stringify(newVal)), { deep: true });
