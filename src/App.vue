@@ -81,6 +81,10 @@
         v-else-if="currentView === 'admin'"
         :setView="setView"
       />
+      <AdminAnalyticsView 
+        v-else-if="currentView === 'analytics'"
+        :setView="setView"
+      />
     </main>
 
     <!-- FOOTER -->
@@ -135,51 +139,69 @@
             </div>
           </div>
 
-          <!-- Payment Fields -->
-          <div class="space-y-3 pt-2">
-            <h3 class="font-serif font-bold text-stone-700 text-xs sm:text-sm uppercase tracking-wider text-rose-500">2. Payment</h3>
-            
-            <div class="space-y-1">
-              <label class="text-xs font-semibold text-stone-450 uppercase">Name on Card</label>
-              <input 
-                type="text" 
-                v-model="checkoutForm.cardName"
-                placeholder="Jane Doe"
-                class="w-full px-3.5 py-2.5 border border-stone-200 rounded-xl focus:ring-2 focus:ring-rose-500/10 focus:border-rose-455 focus:outline-none"
-              />
-            </div>
-
-            <div class="space-y-1">
-              <label class="text-xs font-semibold text-stone-450 uppercase">Card Number</label>
-              <input 
-                type="text" 
-                v-model="checkoutForm.cardNumber"
-                placeholder="4000 1234 5678 9010"
-                class="w-full px-3.5 py-2.5 border border-stone-200 rounded-xl focus:ring-2 focus:ring-rose-500/10 focus:border-rose-455 focus:outline-none"
-              />
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div class="space-y-1">
-                <label class="text-xs font-semibold text-stone-450 uppercase">Expiry Date</label>
-                <input 
-                  type="text" 
-                  v-model="checkoutForm.cardExpiry"
-                  placeholder="MM/YY"
-                  class="w-full px-3.5 py-2.5 border border-stone-200 rounded-xl focus:ring-2 focus:ring-rose-500/10 focus:border-rose-455 focus:outline-none"
-                />
+          <!-- Product Customization -->
+          <div v-if="customizableCartItems.length > 0" class="space-y-3 pt-2">
+            <h3 class="font-serif font-bold text-stone-700 text-xs sm:text-sm uppercase tracking-wider text-rose-500">2. Customization Details</h3>
+            <div
+              v-for="item in customizableCartItems"
+              :key="item.product.id"
+              class="border border-stone-100 bg-[#FBF7F2] rounded-2xl p-4 space-y-3"
+            >
+              <div class="flex items-center gap-3">
+                <img :src="item.product.image" :alt="item.product.name" class="w-12 h-12 rounded-xl object-cover bg-white" />
+                <div class="min-w-0">
+                  <p class="font-bold text-stone-850 text-sm truncate">{{ item.product.name }}</p>
+                  <p class="text-xs text-stone-500">{{ productCustomization(item.product).instructions }}</p>
+                </div>
               </div>
-              <div class="space-y-1">
-                <label class="text-xs font-semibold text-stone-450 uppercase">CVV</label>
-                <input 
-                  type="password" 
-                  v-model="checkoutForm.cardCvv"
-                  placeholder="•••"
-                  maxlength="3"
-                  class="w-full px-3.5 py-2.5 border border-stone-200 rounded-xl focus:ring-2 focus:ring-rose-500/10 focus:border-rose-455 focus:outline-none"
-                />
+
+              <textarea
+                v-if="productCustomization(item.product).allowNotes"
+                v-model="checkoutCustomizations[item.product.id].notes"
+                rows="2"
+                placeholder="Any special instructions for this item?"
+                class="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-rose-500/10"
+              ></textarea>
+
+              <input
+                v-if="productCustomization(item.product).allowText"
+                v-model="checkoutCustomizations[item.product.id].customText"
+                type="text"
+                placeholder="Names, date, quote, message, initials..."
+                class="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10"
+              />
+
+              <input
+                v-if="productCustomization(item.product).allowTheme"
+                v-model="checkoutCustomizations[item.product.id].theme"
+                type="text"
+                placeholder="Preferred colors, theme, occasion, room decor..."
+                class="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10"
+              />
+
+              <div v-if="productCustomization(item.product).allowPhotos" class="space-y-2">
+                <label class="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-rose-200 hover:bg-rose-50/40 transition-colors text-xs font-bold text-stone-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                  Attach reference photos
+                  <input type="file" accept="image/*" multiple class="hidden" @change="handleCustomizationUpload($event, item.product.id)" />
+                </label>
+                <div v-if="checkoutCustomizations[item.product.id].files.length > 0" class="flex flex-wrap gap-2">
+                  <div v-for="(file, idx) in checkoutCustomizations[item.product.id].files" :key="`${file.name}-${idx}`" class="relative w-14 h-14 rounded-lg overflow-hidden border border-stone-200 bg-white">
+                    <img :src="file.data" :alt="file.name" class="w-full h-full object-cover" />
+                    <button @click="removeCustomizationFile(item.product.id, idx)" type="button" class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 text-white text-xs font-bold transition-opacity">Remove</button>
+                  </div>
+                </div>
+                <p class="text-[11px] text-stone-500">Up to 3 photos per product. Images are compressed before saving.</p>
               </div>
             </div>
+          </div>
+
+          <!-- Order Note -->
+          <div class="space-y-2 pt-2 rounded-2xl border border-rose-100 bg-rose-50/60 p-4">
+            <h3 class="font-serif font-bold text-stone-700 text-xs sm:text-sm uppercase tracking-wider text-rose-500">{{ customizableCartItems.length > 0 ? '3' : '2' }}. Order Confirmation</h3>
+            <p class="text-sm text-stone-700 leading-relaxed">
+              Place your request now and the KraftedLove team will contact you to confirm customization, delivery timeline, and payment details.
+            </p>
           </div>
 
           <!-- Error Banner -->
@@ -204,14 +226,14 @@
             <button 
               @click="submitCheckout"
               :disabled="isCheckingOut"
-              class="w-1/2 sm:w-44 py-2.5 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg active:scale-95 disabled:opacity-80 transition-all flex items-center justify-center gap-1.5 text-sm"
+              class="w-1/2 sm:w-44 py-2.5 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-rose-500/25 active:scale-95 disabled:opacity-80 transition-all flex items-center justify-center gap-1.5 text-sm"
             >
               <!-- Spinner -->
               <svg v-if="isCheckingOut" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span>{{ isCheckingOut ? 'Authorizing...' : 'Authorize Payment' }}</span>
+              <span>{{ isCheckingOut ? 'Placing...' : 'Place Order' }}</span>
             </button>
           </div>
         </div>
@@ -235,6 +257,7 @@ import ShopView from './components/ShopView.vue';
 import AboutView from './components/AboutView.vue';
 import DashboardView from './components/DashboardView.vue';
 import AdminDashboardView from './components/AdminDashboardView.vue';
+import AdminAnalyticsView from './components/AdminAnalyticsView.vue';
 import AuthModal from './components/AuthModal.vue';
 
 // Background Particle Class Design
@@ -248,7 +271,7 @@ class BgParticle {
     this.y = Math.random() * height;
     
     this.depth = 0.4 + Math.random() * 1.1; // 0.4 to 1.5 depth scale
-    this.size = (1.5 + Math.random() * 2.5) * this.depth;
+    this.size = (1 + Math.random() * 1.8) * this.depth;
     
     // Set base drift speed (vx) and bobbing speed (vy)
     const direction = Math.random() > 0.5 ? 1 : -1;
@@ -269,7 +292,7 @@ class BgParticle {
     this.color = colors[Math.floor(Math.random() * colors.length)];
     
     // Soft opacity for background usage so it does not interfere with readability
-    this.alpha = 0.12 + Math.random() * 0.28;
+    this.alpha = 0.08 + Math.random() * 0.16;
     
     this.noiseOffset = Math.random() * Math.PI * 2;
     this.noiseSpeed = 0.004 + Math.random() * 0.008;
@@ -429,11 +452,12 @@ export default {
     AboutView,
     DashboardView,
     AdminDashboardView,
+    AdminAnalyticsView,
     AuthModal
   },
   data() {
     return {
-      showIntro: true,
+      showIntro: false,
       merged: false,
       showText: false,
       triggerFadeOut: false,
@@ -456,6 +480,7 @@ export default {
         cardExpiry: '',
         cardCvv: ''
       },
+      checkoutCustomizations: {},
       isCheckingOut: false,
       checkoutError: '',
       bgParticles: [],
@@ -467,6 +492,9 @@ export default {
   computed: {
     store() {
       return store;
+    },
+    customizableCartItems() {
+      return this.store.cart.filter(item => this.productCustomization(item.product).enabled);
     }
   },
   mounted() {
@@ -498,14 +526,21 @@ export default {
     } else if (path === '/dashboard') {
       this.showIntro = false;
       this.currentView = 'dashboard';
-    } else {
+    } else if (path === '/analytics') {
+      this.showIntro = false;
+      this.currentView = 'analytics';
+    } else if (this.shouldShowIntro()) {
       this.$nextTick(() => {
         this.handleResize();
         this.initParticles();
         this.tick();
         this.runIntroAnimation();
       });
+    } else {
+      this.markIntroSeen();
     }
+
+    this.store.trackEvent('page_view', { page: window.location.pathname });
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -671,6 +706,14 @@ export default {
       this.animFrameId = requestAnimationFrame(this.tick);
     },
     runIntroAnimation() {
+      this.timeouts.forEach(clearTimeout);
+      this.timeouts = [];
+
+      if (!this.$refs.introCanvas || this.particles.length === 0) {
+        this.finishIntro();
+        return;
+      }
+
       this.introMode = 'drift';
       this.merged = false;
       this.showText = false;
@@ -678,37 +721,57 @@ export default {
       this.showIntro = true;
       this.animTime = 0;
       
-      // 1. At 2.2s, transition particles from drift mode to assembly mode
       const t1 = setTimeout(() => {
         this.introMode = 'assemble';
-      }, 2200);
+      }, 900);
       
-      // 2. At 3.8s, trigger the final merged glow/snap pulse and show brand text
       const t2 = setTimeout(() => {
         this.merged = true;
         this.showText = true;
-      }, 3800);
+      }, 1900);
       
-      // 3. At 5.5s, trigger preloader fade-out overlay
       const t3 = setTimeout(() => {
         this.triggerFadeOut = true;
-      }, 5500);
+      }, 3000);
       
-      // 4. At 6.1s, hide preloader entirely
       const t4 = setTimeout(() => {
-        this.showIntro = false;
-        if (this.animFrameId) {
-          cancelAnimationFrame(this.animFrameId);
-        }
-      }, 6100);
+        this.finishIntro();
+      }, 3600);
+
+      const failsafe = setTimeout(() => {
+        this.finishIntro();
+      }, 4500);
       
-      this.timeouts.push(t1, t2, t3, t4);
+      this.timeouts.push(t1, t2, t3, t4, failsafe);
     },
     skipIntro() {
+      this.finishIntro();
+    },
+    finishIntro() {
       this.timeouts.forEach(clearTimeout);
+      this.timeouts = [];
+      this.markIntroSeen();
       this.showIntro = false;
+      this.triggerFadeOut = false;
       if (this.animFrameId) {
         cancelAnimationFrame(this.animFrameId);
+        this.animFrameId = null;
+      }
+    },
+    shouldShowIntro() {
+      try {
+        const seenAt = Number(localStorage.getItem('kraftedlove_intro_seen_at') || 0);
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        return !seenAt || Date.now() - seenAt > sevenDays;
+      } catch (e) {
+        return false;
+      }
+    },
+    markIntroSeen() {
+      try {
+        localStorage.setItem('kraftedlove_intro_seen_at', String(Date.now()));
+      } catch (e) {
+        // Ignore private browsing or storage permission failures.
       }
     },
     setView(view) {
@@ -720,6 +783,7 @@ export default {
       if (window.location.pathname !== path) {
         window.history.pushState(null, '', path);
       }
+      this.store.trackEvent('page_view', { page: path });
       
       if (view === 'home') {
         this.timeouts.forEach(clearTimeout);
@@ -727,11 +791,7 @@ export default {
         if (this.animFrameId) {
           cancelAnimationFrame(this.animFrameId);
         }
-        
-        this.handleResize();
-        this.initParticles();
-        this.tick();
-        this.runIntroAnimation();
+        this.showIntro = false;
       } else {
         this.showIntro = false;
         if (this.animFrameId) {
@@ -750,12 +810,15 @@ export default {
       } else if (path === '/about') {
         this.showIntro = false;
         this.currentView = 'about';
-      } else if (path === '/dashboard') {
-        this.showIntro = false;
-        this.currentView = 'dashboard';
-      } else {
-        this.currentView = 'home';
-      }
+    } else if (path === '/dashboard') {
+      this.showIntro = false;
+      this.currentView = 'dashboard';
+    } else if (path === '/analytics') {
+      this.showIntro = false;
+      this.currentView = 'analytics';
+    } else {
+      this.currentView = 'home';
+    }
     },
     setCategoryFilter(category) {
       this.categoryFilter = category;
@@ -769,6 +832,8 @@ export default {
     openCheckout() {
       this.checkoutError = '';
       this.checkoutModalOpen = true;
+      this.initCustomizationForms();
+      this.store.trackEvent('checkout_start', { value: this.store.cartSubtotal });
       if (this.store.currentUser) {
         this.checkoutForm.cardName = this.store.currentUser.name;
       }
@@ -778,18 +843,14 @@ export default {
     },
     async submitCheckout() {
       const f = this.checkoutForm;
-      if (!f.address.trim() || !f.city.trim() || !f.zip.trim() || !f.cardName.trim() || !f.cardNumber || !f.cardCvv) {
-        this.checkoutError = 'Please fill out all shipping and payment fields.';
-        return;
-      }
-
-      if (f.cardNumber.replace(/\s/g, '').length < 16) {
-        this.checkoutError = 'Please enter a valid 16-digit card number.';
+      if (!f.address.trim() || !f.city.trim() || !f.zip.trim()) {
+        this.checkoutError = 'Please fill out all shipping fields.';
         return;
       }
 
       this.isCheckingOut = true;
       this.checkoutError = '';
+      this.store.trackEvent('checkout_submit', { value: this.store.cartSubtotal });
 
       setTimeout(async () => {
         const shippingDetails = {
@@ -799,7 +860,7 @@ export default {
           country: f.country
         };
 
-        const res = await this.store.createOrder(shippingDetails);
+        const res = await this.store.createOrder(shippingDetails, this.buildCustomizationRequests());
         this.isCheckingOut = false;
 
         if (res.success) {
@@ -813,12 +874,93 @@ export default {
             cardExpiry: '',
             cardCvv: ''
           };
+          this.checkoutCustomizations = {};
           this.checkoutModalOpen = false;
           this.setView('dashboard');
         } else {
           this.checkoutError = 'Transaction failed. Please check inventory stock levels.';
         }
       }, 1500);
+    },
+    productCustomization(product = {}) {
+      const incoming = product.customization || {};
+      return {
+        enabled: Boolean(incoming.enabled),
+        allowNotes: Boolean(incoming.allowNotes),
+        allowPhotos: Boolean(incoming.allowPhotos),
+        allowText: Boolean(incoming.allowText),
+        allowTheme: Boolean(incoming.allowTheme),
+        instructions: incoming.instructions || 'Share customization details for this product.'
+      };
+    },
+    initCustomizationForms() {
+      const next = {};
+      this.customizableCartItems.forEach(item => {
+        const existing = this.checkoutCustomizations[item.product.id] || {};
+        next[item.product.id] = {
+          productId: item.product.id,
+          productName: item.product.name,
+          notes: existing.notes || '',
+          customText: existing.customText || '',
+          theme: existing.theme || '',
+          files: existing.files || []
+        };
+      });
+      this.checkoutCustomizations = next;
+    },
+    buildCustomizationRequests() {
+      return Object.values(this.checkoutCustomizations).filter(request => {
+        return request.notes.trim() || request.customText.trim() || request.theme.trim() || request.files.length > 0;
+      });
+    },
+    async handleCustomizationUpload(event, productId) {
+      const files = Array.from(event.target.files || []).slice(0, 3);
+      if (files.length === 0) return;
+      if (!this.checkoutCustomizations[productId]) {
+        this.checkoutCustomizations[productId] = { productId, productName: '', notes: '', customText: '', theme: '', files: [] };
+      }
+
+      const remainingSlots = Math.max(0, 3 - this.checkoutCustomizations[productId].files.length);
+      const compressed = await Promise.all(files.slice(0, remainingSlots).map(this.compressImageFile));
+      this.checkoutCustomizations[productId].files = [
+        ...this.checkoutCustomizations[productId].files,
+        ...compressed
+      ];
+      event.target.value = '';
+    },
+    compressImageFile(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxSize = 900;
+            let { width, height } = img;
+            if (width > height && width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            } else if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+            canvas.width = Math.round(width);
+            canvas.height = Math.round(height);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve({
+              name: file.name,
+              type: 'image/jpeg',
+              data: canvas.toDataURL('image/jpeg', 0.72)
+            });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    },
+    removeCustomizationFile(productId, index) {
+      this.checkoutCustomizations[productId].files.splice(index, 1);
     },
     handleBgMouseMove(e) {
       this.bgMouse.x = e.clientX;
@@ -839,7 +981,7 @@ export default {
     initBgParticles() {
       const canvas = this.$refs.bgCanvas;
       if (!canvas) return;
-      const particleCount = 100;
+      const particleCount = 48;
       this.bgParticles = Array.from({ length: particleCount }, () => new BgParticle(canvas.width, canvas.height));
     },
     tickBg() {

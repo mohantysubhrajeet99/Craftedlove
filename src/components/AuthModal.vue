@@ -1,7 +1,7 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn" @click.self="closeModal">
+  <div v-if="isOpen" class="fixed inset-0 bg-stone-950/50 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn" @click.self="closeModal">
     <!-- Modal Box -->
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden animate-slideUp">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 relative overflow-hidden animate-slideUp border border-white/70">
       
       <!-- Decoration top bar -->
       <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rose-400 via-pink-500 to-indigo-500"></div>
@@ -60,6 +60,24 @@
           <p v-if="errors.email" class="text-xs text-red-500 mt-0.5">{{ errors.email }}</p>
         </div>
 
+        <!-- Phone Input (Register Only) -->
+        <div v-if="!isLogin" class="space-y-1">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Phone Number</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.14-4.117-6.942-6.942l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            </span>
+            <input 
+              type="tel" 
+              v-model="phone"
+              class="pl-10 w-full px-4 py-2.5 rounded-xl border text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10 focus:border-rose-450 transition-all"
+              :class="errors.phone ? 'border-red-400' : 'border-stone-200'"
+              placeholder="+919876543210"
+            />
+          </div>
+          <p v-if="errors.phone" class="text-xs text-red-500 mt-0.5">{{ errors.phone }}</p>
+        </div>
+
         <!-- Password Input -->
         <div class="space-y-1">
           <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Password</label>
@@ -99,7 +117,7 @@
         <!-- Submit Button -->
         <button 
           type="submit" 
-          class="w-full mt-2 py-3 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg shadow-rose-500/20 active:scale-[0.99] transition-all text-sm"
+          class="w-full mt-2 py-3 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-rose-500/25 shadow-rose-500/20 active:scale-[0.99] transition-all text-sm"
         >
           {{ isLogin ? 'Sign In' : 'Create Account' }}
         </button>
@@ -140,6 +158,7 @@ export default {
       isLogin: true,
       name: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
       errors: {}
@@ -155,6 +174,7 @@ export default {
       this.isLogin = !this.isLogin;
       this.name = '';
       this.email = '';
+      this.phone = '';
       this.password = '';
       this.confirmPassword = '';
       this.errors = {};
@@ -162,6 +182,7 @@ export default {
     validate() {
       const err = {};
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\+\d{7,15}$/;
       
       if (!this.email) {
         err.email = 'Email is required.';
@@ -178,6 +199,11 @@ export default {
       if (!this.isLogin) {
         if (!this.name.trim()) {
           err.name = 'Name is required.';
+        }
+        if (!this.phone.trim()) {
+          err.phone = 'Phone number is required.';
+        } else if (!phoneRegex.test(this.phone.trim())) {
+          err.phone = 'Include country code, for example +919876543210.';
         }
         if (this.password !== this.confirmPassword) {
           err.confirmPassword = 'Passwords do not match.';
@@ -196,7 +222,7 @@ export default {
           this.closeModal();
         }
       } else {
-        const res = await this.store.register(this.name, this.email, this.password);
+        const res = await this.store.register(this.name, this.email, this.phone, this.password);
         if (res.success) {
           this.closeModal();
         }
@@ -205,6 +231,7 @@ export default {
     closeModal() {
       this.name = '';
       this.email = '';
+      this.phone = '';
       this.password = '';
       this.confirmPassword = '';
       this.errors = {};

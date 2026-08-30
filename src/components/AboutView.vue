@@ -16,13 +16,13 @@
           KraftedLove is a little space born from a big love for creativity, thoughtful gifting, and handmade memories.
         </p>
         <p class="text-stone-500 leading-relaxed">
-          Founded by <strong>Sonali Dhupal</strong>, a Team Lead at an MNC with Karma Group Operations in Bangalore, KraftedLove began as a passion for turning simple ideas into beautiful, heartfelt creations.
+          Founded by <strong>Sonali Dhupal</strong>, a Bangalore-based Team Lead at Karma Group Operations, KraftedLove began as her passion for turning simple ideas into beautiful, heartfelt creations.
         </p>
         <p class="text-stone-500 leading-relaxed">
           From handcrafted gifts and resin art to beautifully crafted chocolates and personalised surprises, every creation is made with patience, creativity, and a whole lot of love. ✨
         </p>
         <blockquote class="border-l-4 border-rose-500 pl-4 italic text-stone-600 py-2 bg-[#FBF7F2] rounded-r-xl pr-4">
-          "We believe that a gift isn’t just something you give — it’s a feeling, a memory, and a little piece of your heart."
+          "We believe a gift is more than something you give. It is a feeling, a memory, and a little piece of your heart."
         </blockquote>
       </div>
 

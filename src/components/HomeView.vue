@@ -9,7 +9,7 @@
         <div class="hidden lg:block pointer-events-none">
           <!-- Paint Palette SVG -->
           <div class="absolute left-6 xl:left-16 top-10">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-18 h-18 animate-float-1 filter drop-shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-[72px] h-[72px] animate-float-1 filter drop-shadow-md">
               <path d="M50 20 C50 8, 30 8, 16 16 C6 22, 4 36, 12 46 C18 54, 30 58, 42 54 C48 52, 54 44, 52 36 C50 30, 60 28, 50 20 Z" fill="#E8D1B3" stroke="#C4A482" stroke-width="2"/>
               <ellipse cx="20" cy="40" rx="3" ry="5" fill="#FAF6F0" stroke="#C4A482" stroke-width="1"/>
               <circle cx="28" cy="20" r="4" fill="#F43F5E"/>
@@ -41,7 +41,7 @@
         <div class="hidden lg:block pointer-events-none">
           <!-- Daisy Flower SVG -->
           <div class="absolute right-6 xl:right-16 top-8">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-18 h-18 animate-float-3 filter drop-shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-[72px] h-[72px] animate-float-3 filter drop-shadow-md">
               <g fill="#FFF5E6" stroke="#E6D3B8" stroke-width="1.5">
                 <ellipse cx="32" cy="18" rx="5" ry="12"/>
                 <ellipse cx="32" cy="46" rx="5" ry="12"/>
@@ -58,8 +58,8 @@
             </svg>
           </div>
           <!-- Chocolate Truffle SVG -->
-          <div class="absolute right-20 xl:right-40 top-26">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-15 h-15 animate-float-4 filter drop-shadow-md">
+          <div class="absolute right-20 xl:right-40 top-[104px]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-[60px] h-[60px] animate-float-4 filter drop-shadow-md">
               <path d="M12 32 C12 20, 24 16, 32 16 C40 16, 52 20, 52 32 C52 44, 40 48, 32 48 C24 48, 12 44, 12 32 Z" fill="#653B19" stroke="#48240A" stroke-width="2"/>
               <path d="M20 28 Q 28 20, 36 28 T 52 28" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
               <polygon points="28,34 30,38 34,38 31,40 32,44 28,42 24,44 25,40 22,38 26,38" fill="#FBBF24"/>
@@ -80,14 +80,30 @@
           </div>
         </div>
 
-        <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-          <span class="text-xs uppercase tracking-widest font-semibold text-rose-500 bg-rose-50 px-3 py-1 rounded-full">Artisanal Gallery</span>
-          <h1 class="font-serif text-3xl sm:text-5xl font-bold text-stone-850 mt-3 leading-tight">Handmade Treasures, Crafted with Love</h1>
-          <p class="text-sm sm:text-base text-stone-700 mt-3">Explore our curated collections of hand-poured resins, hand-painted glass bottles, floral frames, and single-origin chocolates.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 items-center mb-10 sm:mb-14">
+          <div class="max-w-2xl reveal-soft">
+            <span class="text-xs uppercase tracking-widest font-semibold text-rose-500 bg-white/80 border border-rose-100 px-3 py-1 rounded-full">Handmade in Bangalore</span>
+            <h1 class="font-serif text-4xl sm:text-6xl font-bold text-stone-850 mt-5 leading-[0.95]">Gifts that feel personal before they are opened</h1>
+            <p class="text-sm sm:text-lg text-stone-700 mt-5 leading-relaxed">KraftedLove creates heartfelt decor, keepsakes, custom hangings, painted glass, resin art, and chocolates for homes and celebrations with a little more soul.</p>
+            <div class="mt-7 flex flex-col sm:flex-row gap-3">
+              <button @click="exploreShop" class="py-3 px-7 bg-rose-500 hover:bg-rose-600 text-white text-sm font-bold rounded-full shadow-lg shadow-rose-500/20 active:scale-95 transition-all">Explore the Shop</button>
+              <button @click="setView('about')" class="py-3 px-7 bg-white hover:bg-stone-50 text-stone-850 text-sm font-bold rounded-full border border-stone-150 active:scale-95 transition-all">Meet the Maker</button>
+            </div>
+          </div>
+
+          <div class="relative h-[360px] sm:h-[460px] reveal-soft reveal-delay-1">
+            <img src="/assets/images/pressed-flower-frame.png" alt="Pressed floral frame" class="absolute left-0 top-6 w-[52%] h-[70%] rounded-2xl object-cover shadow-2xl shadow-stone-900/10 rotate-[-2deg] hero-float-slow" />
+            <img src="/assets/images/wedding-kalire.png" alt="Custom wedding hangings" class="absolute right-0 top-0 w-[48%] h-[56%] rounded-2xl object-cover shadow-xl shadow-rose-900/10 rotate-[2deg] hero-float-medium" />
+            <img src="/assets/images/ocean-resin-table.png" alt="Ocean resin table" class="absolute right-[8%] bottom-0 w-[55%] h-[46%] rounded-2xl object-cover shadow-2xl shadow-indigo-900/10 hero-float-slow" />
+            <div class="absolute left-[10%] bottom-8 bg-white/90 backdrop-blur border border-white/70 rounded-2xl px-4 py-3 shadow-lg">
+              <p class="text-[10px] uppercase tracking-widest font-bold text-rose-500">Custom orders</p>
+              <p class="text-sm font-bold text-stone-850 mt-0.5">Dreamed by you, crafted by us.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Staggered Panel Container -->
-        <div class="flex flex-col md:flex-row gap-4 h-[600px] md:h-[480px] w-full">
+        <div class="flex flex-col md:flex-row gap-4 h-[560px] md:h-[360px] w-full reveal-soft reveal-delay-2">
           
           <!-- Panel 1: Resin Art -->
           <div 
@@ -188,18 +204,18 @@
     </section>
 
     <!-- BRAND STORY INTRO -->
-    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-4">
+    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-4 reveal-soft">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         <!-- Image grid -->
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-4">
-            <img src="/assets/images/pressed-flower-frame.png" class="rounded-2xl shadow-md w-full h-48 sm:h-64 object-cover object-center" alt="Pressed Flower Frame detail" />
-            <img src="/assets/images/lotus-resin-tray.png" class="rounded-2xl shadow-md w-full h-36 object-cover object-center" alt="Lotus Tray detail" />
+            <img src="/assets/images/pressed-flower-frame.png" class="rounded-2xl shadow-md w-full h-48 sm:h-64 object-cover object-center hover-lift" alt="Pressed Flower Frame detail" />
+            <img src="/assets/images/lotus-resin-tray.png" class="rounded-2xl shadow-md w-full h-36 object-cover object-center hover-lift" alt="Lotus Tray detail" />
           </div>
           <div class="space-y-4 pt-8">
-            <img src="/assets/images/buddha-bottle.png" class="rounded-2xl shadow-md w-full h-36 object-cover object-center" alt="Painted Buddha Bottle detail" />
-            <img src="/assets/images/gourmet-chocolate-bark.jpg" class="rounded-2xl shadow-md w-full h-48 sm:h-64 object-cover object-center" alt="Artisanal Chocolate detail" />
+            <img src="/assets/images/buddha-bottle.png" class="rounded-2xl shadow-md w-full h-36 object-cover object-center hover-lift" alt="Painted Buddha Bottle detail" />
+            <img src="/assets/images/gourmet-chocolate-bark.jpg" class="rounded-2xl shadow-md w-full h-48 sm:h-64 object-cover object-center hover-lift" alt="Artisanal Chocolate detail" />
           </div>
         </div>
 
@@ -208,7 +224,7 @@
           <span class="text-xs uppercase tracking-widest font-semibold text-rose-500">Made by hand, with intention</span>
           <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-850 leading-tight">Every Creation Tells an Artisanal Story</h2>
           <p class="text-stone-700 text-sm sm:text-base leading-relaxed">
-            At **KraftedLove**, we believe that the objects in your home should carry warmth, intent, and human touch. We gather raw elements—glass, organic flower petals, premium cacao, and resin—and mold them into objects of beauty.
+            At KraftedLove, we believe that the objects in your home should carry warmth, intent, and human touch. We gather raw elements—glass, organic flower petals, premium cacao, and resin—and mold them into objects of beauty.
           </p>
           <p class="text-stone-700 text-sm sm:text-base leading-relaxed">
             Our small-batch production process ensures that no two items are exactly alike. When you purchase a piece of Lippan art, a painted vase, or a box of gold-dusted truffles, you are bringing home hours of meticulous craft, artistic dedication, and a piece of the artisan's soul.
@@ -221,69 +237,68 @@
       </div>
     </section>
 
-    <!-- CURATED SHOWCASE (FEATURED PRODUCTS) -->
-    <section class="bg-[#FBF7F2]/80 py-16">
+    <!-- BRAND SHOWCASE -->
+    <section class="bg-[#FBF7F2]/80 py-16 reveal-soft">
       <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16">
         <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-10 gap-4">
           <div>
-            <span class="text-xs uppercase tracking-widest font-semibold text-rose-500">Curated Gems</span>
-            <h2 class="font-serif text-3xl font-bold text-stone-850 mt-1">Trending Creations</h2>
+            <span class="text-xs uppercase tracking-widest font-semibold text-rose-500">Made to Be Remembered</span>
+            <h2 class="font-serif text-3xl font-bold text-stone-850 mt-1">A Little Love for Every Occasion</h2>
           </div>
           <button @click="setView('shop')" class="text-sm font-semibold text-rose-500 hover:text-rose-650 flex items-center gap-1">
-            Shop Entire Catalog
+            Browse Collections
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
           </button>
         </div>
 
-        <!-- Product Grid -->
+        <!-- Editorial Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div 
-            v-for="product in featuredProducts" 
-            :key="product.id" 
-            class="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:shadow-xl hover:border-stone-200/60 transition-all duration-300 flex flex-col"
+            v-for="feature in brandFeatures" 
+            :key="feature.title" 
+            class="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-stone-200/60 transition-all duration-500 flex flex-col"
           >
-            <!-- Thumbnail -->
-            <div class="aspect-square bg-[#FBF7F2] overflow-hidden relative">
-              <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="aspect-[4/5] bg-[#FBF7F2] overflow-hidden relative">
+              <img :src="feature.image" :alt="feature.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
               <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-stone-800 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
-                {{ product.category }}
+                {{ feature.tag }}
               </span>
-            </div>
-
-            <!-- Details -->
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <h3 class="font-serif text-lg font-bold text-stone-800 line-clamp-1 group-hover:text-rose-500 transition-colors leading-snug">{{ product.name }}</h3>
-                <div class="flex items-center gap-1.5">
-                  <!-- Rating Stars -->
-                  <div class="flex text-amber-400">
-                    <svg v-for="i in 5" :key="i" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                  </div>
-                  <span class="text-xs text-stone-700 font-medium">({{ product.reviews.length }} Reviews)</span>
-                </div>
-                <p class="text-sm text-stone-700 line-clamp-2 leading-relaxed">
-                  {{ product.description }}
-                </p>
-              </div>
-
-              <div class="flex items-center justify-between pt-2 border-t border-stone-50">
-                <span class="text-xl font-bold text-stone-850 font-sans">₹<span>{{ product.price }}</span></span>
-                <button 
-                  @click="addToCart(product)"
-                  class="py-2 px-5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-full hover:shadow-md transition-all active:scale-95 flex items-center gap-1"
-                >
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                  Add to Bag
-                </button>
+              <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
+                <p class="text-xs font-semibold uppercase tracking-widest text-rose-200">{{ feature.mood }}</p>
+                <h3 class="font-serif text-2xl font-bold leading-tight mt-1">{{ feature.title }}</h3>
               </div>
             </div>
+
+            <div class="p-5 space-y-4">
+              <p class="text-sm text-stone-700 leading-relaxed">{{ feature.copy }}</p>
+              <button 
+                @click="exploreCategory(feature.category)"
+                class="text-sm font-semibold text-rose-500 hover:text-rose-650 inline-flex items-center gap-1"
+              >
+                Explore {{ feature.category }}
+                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div 
+            v-for="promise in brandPromises" 
+            :key="promise.title"
+            class="rounded-2xl border border-stone-100 bg-white/75 px-5 py-4 hover:bg-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
+          >
+            <p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">{{ promise.label }}</p>
+            <h3 class="mt-2 text-sm font-bold text-stone-850">{{ promise.title }}</h3>
+            <p class="mt-1 text-xs text-stone-600 leading-relaxed">{{ promise.copy }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CUSTOMER TESTIMONIALS -->
-    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-4">
+    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-4 reveal-soft">
       <div class="text-center max-w-xl mx-auto mb-12">
         <span class="text-xs uppercase tracking-widest font-semibold text-rose-500">Love Letters</span>
         <h2 class="font-serif text-3xl font-bold text-stone-855 mt-1">What Our Friends Say</h2>
@@ -292,7 +307,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         <!-- Testimonial 1 -->
-        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-white/65 rounded-2xl border border-stone-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">
@@ -309,7 +324,7 @@
         </div>
 
         <!-- Testimonial 2 -->
-        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-white/65 rounded-2xl border border-stone-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">
@@ -326,7 +341,7 @@
         </div>
 
         <!-- Testimonial 3 -->
-        <div class="p-6 sm:p-8 bg-[#FBF7F2] rounded-2xl border border-stone-100 hover:shadow-md transition-shadow relative">
+        <div class="p-6 sm:p-8 bg-white/65 rounded-2xl border border-stone-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative">
           <span class="absolute top-6 right-8 text-rose-100 font-serif text-7xl select-none">“</span>
           <div class="space-y-4">
             <p class="text-sm sm:text-base text-stone-700 italic leading-relaxed relative z-10">
@@ -346,8 +361,8 @@
     </section>
 
     <!-- END CTA BANNER -->
-    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 pt-6">
-      <div class="bg-gradient-to-r from-rose-500 via-pink-600 to-indigo-600 rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-xl relative overflow-hidden">
+    <section class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 pt-6 reveal-soft">
+      <div class="bg-gradient-to-r from-rose-500 via-pink-600 to-indigo-600 rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-xl shadow-rose-900/10 relative overflow-hidden">
         
         <!-- Background accent rings -->
         <div class="absolute -right-24 -top-24 w-80 h-80 rounded-full border-4 border-white/10 pointer-events-none"></div>
@@ -369,8 +384,6 @@
 </template>
 
 <script>
-import { store } from '../store.js';
-
 export default {
   name: 'HomeView',
   props: {
@@ -383,13 +396,57 @@ export default {
       required: true
     }
   },
-  computed: {
-    store() {
-      return store;
-    },
-    featuredProducts() {
-      return this.store.products.filter(p => [1, 2, 11].includes(p.id));
-    }
+  data() {
+    return {
+      brandFeatures: [
+        {
+          tag: 'Wedding Gifts',
+          mood: 'For keepsake moments',
+          title: 'Memories Made Tangible',
+          category: 'Frames',
+          image: '/assets/images/pressed-flower-frame.png',
+          copy: 'Personal frames, floral details, and mirror work made to hold the moments people never want to forget.'
+        },
+        {
+          tag: 'Home Decor',
+          mood: 'For warm corners',
+          title: 'Color for Everyday Spaces',
+          category: 'Glass Art',
+          image: '/assets/images/bottle-collection.png',
+          copy: 'Painted bottles, textured finishes, and small handcrafted accents that make a room feel personal.'
+        },
+        {
+          tag: 'Sweet Gifting',
+          mood: 'For thoughtful surprises',
+          title: 'Little Luxuries to Share',
+          category: 'Chocolates',
+          image: '/assets/images/gourmet-chocolate-bark.jpg',
+          copy: 'Small-batch chocolates for celebrations, thank-yous, festive boxes, and soft everyday indulgence.'
+        }
+      ],
+      brandPromises: [
+        {
+          label: 'Small Batch',
+          title: 'Made Slowly',
+          copy: 'Every piece is crafted in limited quantities with patient hands and careful finishing.'
+        },
+        {
+          label: 'Personal',
+          title: 'Custom Friendly',
+          copy: 'Names, colors, occasions, and little details can shape many KraftedLove pieces.'
+        },
+        {
+          label: 'Gift Ready',
+          title: 'Thoughtful Packaging',
+          copy: 'Designed to feel special from the first look to the final place in someone’s home.'
+        },
+        {
+          label: 'Local Craft',
+          title: 'Rooted in Bangalore',
+          copy: 'A homegrown creative studio building warmth through handmade decor and gifting.'
+        }
+      ]
+    };
   },
   methods: {
     exploreCategory(category) {
@@ -399,9 +456,6 @@ export default {
     exploreShop() {
       this.setCategoryFilter('');
       this.setView('shop');
-    },
-    addToCart(product) {
-      this.store.addToCart(product, 1);
     }
   }
 };

@@ -20,6 +20,13 @@
           </h1>
           <p class="text-sm text-stone-400 mt-1">Configure product pricing, manage stock, and progress delivery tracking pipelines.</p>
         </div>
+        <button
+          @click="openAnalyticsDashboard"
+          class="px-5 py-2.5 bg-gradient-to-r from-rose-500 to-indigo-600 text-white text-xs font-bold rounded-full hover:shadow-lg hover:shadow-rose-500/20 active:scale-95 transition-all flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l3-3 3 2 5-7"/></svg>
+          Open Analytics Dashboard
+        </button>
       </div>
 
       <!-- STATS OVERVIEW CARDS -->
@@ -64,15 +71,87 @@
         >
           Order Fulfillment Queue
         </button>
+        <button 
+          @click="activeTab = 'customers'"
+          class="pb-3 border-b-2 transition-all cursor-pointer"
+          :class="activeTab === 'customers' ? 'border-rose-500 text-rose-550 font-bold' : 'border-transparent text-stone-400 hover:text-stone-700'"
+        >
+          Registered Customers
+        </button>
+        <button 
+          @click="activeTab = 'categories'"
+          class="pb-3 border-b-2 transition-all cursor-pointer"
+          :class="activeTab === 'categories' ? 'border-rose-500 text-rose-550 font-bold' : 'border-transparent text-stone-400 hover:text-stone-700'"
+        >
+          Category Manager
+        </button>
       </div>
 
       <!-- TAB 1: PRODUCT CATALOG MANAGER -->
       <div v-show="activeTab === 'catalog'" class="space-y-6">
-        <div class="flex justify-between items-center">
-          <h3 class="font-serif text-lg font-bold text-stone-800">Active Catalog Items</h3>
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+          <div>
+            <h3 class="font-serif text-lg font-bold text-stone-800">Active Catalog Items</h3>
+            <p class="text-xs text-stone-500 mt-1">Showing {{ filteredAdminProducts.length }} of {{ store.products.length }} products</p>
+          </div>
           <button @click="startAdd" class="py-2.5 px-6 bg-stone-900 text-white text-xs font-semibold rounded-full hover:bg-stone-800 transition-colors shadow-md active:scale-95 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
             Add New Product
+          </button>
+        </div>
+
+        <!-- Catalog Search and Filters -->
+        <div class="bg-white border border-stone-100 rounded-2xl p-4 shadow-sm grid grid-cols-1 md:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_auto] gap-3 items-end">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400">Search Products</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"/></svg>
+              </span>
+              <input
+                v-model="productSearch"
+                type="search"
+                placeholder="Search name, category, ID..."
+                class="w-full pl-9 pr-3 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400">Category</label>
+            <select v-model="productCategoryFilter" class="w-full px-3 py-2.5 border border-stone-200 rounded-xl text-sm bg-white focus:outline-none">
+              <option value="">All Categories</option>
+              <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400">Stock</label>
+            <select v-model="productStockFilter" class="w-full px-3 py-2.5 border border-stone-200 rounded-xl text-sm bg-white focus:outline-none">
+              <option value="">All Stock</option>
+              <option value="available">Available</option>
+              <option value="low">Low Stock</option>
+              <option value="out">Out of Stock</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400">Sort By</label>
+            <select v-model="productSort" class="w-full px-3 py-2.5 border border-stone-200 rounded-xl text-sm bg-white focus:outline-none">
+              <option value="newest">Newest First</option>
+              <option value="name">Name A-Z</option>
+              <option value="priceHigh">Price High-Low</option>
+              <option value="priceLow">Price Low-High</option>
+              <option value="stockLow">Stock Low-High</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            @click="clearProductFilters"
+            class="px-4 py-2.5 border border-stone-200 rounded-xl text-xs font-bold text-stone-600 hover:bg-stone-50 transition-colors"
+          >
+            Clear
           </button>
         </div>
 
@@ -89,7 +168,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-stone-50 text-stone-750">
-              <tr v-for="product in store.products" :key="product.id" class="hover:bg-stone-50/30 transition-colors">
+              <tr v-for="product in filteredAdminProducts" :key="product.id" class="hover:bg-stone-50/30 transition-colors">
                 <!-- Thumbnail & Name -->
                 <td class="p-4 flex items-center gap-3">
                   <img :src="product.image" class="w-12 h-12 rounded-lg object-cover bg-[#FBF7F2] flex-shrink-0" />
@@ -123,6 +202,11 @@
                 <td class="p-4 text-right space-x-2">
                   <button @click="startEdit(product)" class="text-indigo-650 hover:text-indigo-800 text-xs font-bold">Edit</button>
                   <button @click="deleteProduct(product.id)" class="text-rose-500 hover:text-rose-750 text-xs font-bold">Delete</button>
+                </td>
+              </tr>
+              <tr v-if="filteredAdminProducts.length === 0">
+                <td colspan="5" class="p-10 text-center text-sm text-stone-500">
+                  No products match these filters.
                 </td>
               </tr>
             </tbody>
@@ -166,6 +250,12 @@
                 >
                   {{ order.status }}
                 </span>
+                <button
+                  @click="deleteOrder(order.id)"
+                  class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-rose-100 text-rose-500 hover:bg-rose-50 transition-colors"
+                >
+                  Delete
+                </button>
               </div>
             </div>
 
@@ -241,13 +331,202 @@
 
             </div>
 
+            <div v-if="order.customizationRequests && order.customizationRequests.length > 0" class="border-t border-stone-50 pt-4 space-y-3">
+              <p class="font-semibold text-stone-400 uppercase tracking-wider text-[10px]">Customization Requests</p>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <div v-for="request in order.customizationRequests" :key="request.productId" class="bg-rose-50/50 border border-rose-100 rounded-2xl p-4 space-y-2 text-xs">
+                  <p class="font-bold text-stone-850">{{ request.productName }}</p>
+                  <p v-if="request.notes" class="text-stone-700"><strong>Notes:</strong> {{ request.notes }}</p>
+                  <p v-if="request.customText" class="text-stone-700"><strong>Text:</strong> {{ request.customText }}</p>
+                  <p v-if="request.theme" class="text-stone-700"><strong>Theme:</strong> {{ request.theme }}</p>
+                  <div v-if="request.files && request.files.length > 0" class="flex flex-wrap gap-2 pt-1">
+                    <a
+                      v-for="(file, idx) in request.files"
+                      :key="`${request.productId}-${idx}`"
+                      :href="file.data"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="block w-16 h-16 rounded-lg overflow-hidden border border-white shadow-sm bg-white"
+                      title="Open attached reference"
+                    >
+                      <img :src="file.data" :alt="file.name" class="w-full h-full object-cover" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: REGISTERED CUSTOMERS -->
+      <div v-show="activeTab === 'customers'" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <h3 class="font-serif text-lg font-bold text-stone-850">Registered Customers</h3>
+            <p class="text-sm text-stone-500 mt-1">See who signed up, what they ordered, and which customers bring the most value.</p>
+          </div>
+          <button @click="refreshCustomerData" class="px-5 py-2.5 rounded-full bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 transition-colors">Refresh Insights</button>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white border border-stone-100 p-5 rounded-2xl space-y-1">
+            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">Registered Users</span>
+            <p class="text-2xl font-bold text-stone-850">{{ store.customerInsights?.totalCustomers || 0 }}</p>
+          </div>
+          <div class="bg-white border border-stone-100 p-5 rounded-2xl space-y-1">
+            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">New Customers</span>
+            <p class="text-2xl font-bold text-stone-850">{{ store.customerInsights?.newCustomers || 0 }}</p>
+          </div>
+          <div class="bg-white border border-stone-100 p-5 rounded-2xl space-y-1">
+            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">Avg Spend/User</span>
+            <p class="text-2xl font-bold text-stone-850 font-sans">₹{{ store.customerInsights?.averageSpendPerCustomer || 0 }}</p>
+          </div>
+          <div class="bg-white border border-stone-100 p-5 rounded-2xl space-y-1">
+            <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">High Value</span>
+            <p class="text-2xl font-bold text-rose-500">{{ store.customerInsights?.highValueCustomers || 0 }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-6">
+          <div class="bg-white border border-stone-100 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-4 border-b border-stone-100">
+              <h4 class="font-bold text-stone-850">Customer List</h4>
+              <p class="text-xs text-stone-500 mt-1">{{ customersWithOrders.length }} with orders, {{ store.customerInsights?.customersWithNoOrders || 0 }} without orders</p>
+            </div>
+            <div v-if="store.users.length === 0" class="p-8 text-center text-sm text-stone-500">No registered customers yet.</div>
+            <button
+              v-for="user in store.users"
+              :key="user.email"
+              @click="selectCustomer(user.email)"
+              class="w-full p-4 text-left border-b border-stone-50 last:border-b-0 hover:bg-rose-50/40 transition-colors"
+              :class="selectedCustomerEmail === user.email ? 'bg-rose-50/70' : ''"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-bold text-stone-850 truncate">{{ user.name }}</p>
+                  <p class="text-xs text-stone-500 truncate">{{ user.email }}</p>
+                  <p class="text-xs text-stone-500 truncate">{{ user.phone || 'Phone not available' }}</p>
+                </div>
+                <span class="text-[10px] font-bold uppercase rounded-full px-2 py-1 whitespace-nowrap"
+                  :class="user.valueLabel === 'High-value customer' ? 'bg-rose-100 text-rose-600' : user.orderCount > 0 ? 'bg-green-50 text-green-600' : 'bg-stone-100 text-stone-500'"
+                >
+                  {{ user.valueLabel }}
+                </span>
+              </div>
+              <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                <span class="bg-[#FBF7F2] rounded-lg p-2"><strong>{{ user.orderCount }}</strong><br>Orders</span>
+                <span class="bg-[#FBF7F2] rounded-lg p-2"><strong>₹{{ user.totalSpent }}</strong><br>Spent</span>
+                <span class="bg-[#FBF7F2] rounded-lg p-2"><strong>{{ user.favoriteCategory }}</strong><br>Favorite</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="bg-white border border-stone-100 rounded-2xl p-5 shadow-sm min-h-[420px]">
+            <div v-if="!store.selectedCustomerDetails" class="h-full flex flex-col items-center justify-center text-center text-stone-500">
+              <h4 class="font-serif text-xl font-bold text-stone-850">Select a customer</h4>
+              <p class="text-sm mt-1 max-w-sm">Click any registered user to view their orders, spending behavior, and customer value summary.</p>
+            </div>
+
+            <div v-else class="space-y-5">
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 pb-4 border-b border-stone-100">
+                <div>
+                  <h4 class="font-serif text-2xl font-bold text-stone-850">{{ store.selectedCustomerDetails.customer.name }}</h4>
+                  <p class="text-sm text-stone-500">{{ store.selectedCustomerDetails.customer.email }}</p>
+                  <p class="text-sm text-stone-500">{{ store.selectedCustomerDetails.customer.phone || 'Phone not available' }}</p>
+                </div>
+                <span class="w-max text-xs font-bold uppercase rounded-full px-3 py-1 bg-rose-100 text-rose-600">{{ store.selectedCustomerDetails.customer.valueLabel }}</span>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="bg-[#FBF7F2] rounded-xl p-3">
+                  <p class="text-[10px] uppercase font-bold text-stone-500">Total Spent</p>
+                  <p class="font-bold text-stone-850 font-sans">₹{{ store.selectedCustomerDetails.customer.totalSpent }}</p>
+                </div>
+                <div class="bg-[#FBF7F2] rounded-xl p-3">
+                  <p class="text-[10px] uppercase font-bold text-stone-500">Orders</p>
+                  <p class="font-bold text-stone-850">{{ store.selectedCustomerDetails.customer.orderCount }}</p>
+                </div>
+                <div class="bg-[#FBF7F2] rounded-xl p-3">
+                  <p class="text-[10px] uppercase font-bold text-stone-500">Avg Order</p>
+                  <p class="font-bold text-stone-850 font-sans">₹{{ store.selectedCustomerDetails.customer.averageOrderValue }}</p>
+                </div>
+                <div class="bg-[#FBF7F2] rounded-xl p-3">
+                  <p class="text-[10px] uppercase font-bold text-stone-500">Items Bought</p>
+                  <p class="font-bold text-stone-850">{{ store.selectedCustomerDetails.customer.totalItems }}</p>
+                </div>
+              </div>
+
+              <div class="rounded-2xl bg-rose-50/60 border border-rose-100 p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-rose-500">Insight</p>
+                <p class="text-sm text-stone-700 mt-1">{{ customerInsightText }}</p>
+              </div>
+
+              <div class="space-y-3">
+                <h5 class="font-serif font-bold text-stone-850">Order History</h5>
+                <div v-if="store.selectedCustomerDetails.orders.length === 0" class="text-sm text-stone-500 border border-dashed border-stone-200 rounded-xl p-6 text-center">This customer has not ordered yet.</div>
+                <div v-else class="space-y-3 max-h-[360px] overflow-y-auto pr-1">
+                  <div v-for="order in store.selectedCustomerDetails.orders" :key="order.id" class="border border-stone-100 rounded-xl p-4">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="font-mono font-bold text-stone-850">#{{ order.id }}</span>
+                      <span class="text-xs font-bold text-rose-600 font-sans">₹{{ order.total }}</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-1">{{ formatDate(order.date) }} · {{ order.status }}</p>
+                    <ul class="mt-3 space-y-1 text-xs text-stone-700">
+                      <li v-for="item in order.items" :key="item.product.id" class="flex justify-between gap-3">
+                        <span class="truncate">{{ item.product.name }}</span>
+                        <span>x{{ item.quantity }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: CATEGORY MANAGER -->
+      <div v-show="activeTab === 'categories'" class="space-y-6">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-stone-850">Category Manager</h3>
+          <p class="text-sm text-stone-500 mt-1">These categories appear in the customer shop filters and product forms.</p>
+        </div>
+
+        <form @submit.prevent="addCategory" class="bg-white border border-stone-100 rounded-2xl p-5 flex flex-col sm:flex-row gap-3 shadow-sm">
+          <input 
+            type="text"
+            v-model="newCategoryName"
+            placeholder="Add category, e.g. Hampers"
+            class="flex-grow px-4 py-3 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10"
+          />
+          <button type="submit" class="px-6 py-3 bg-stone-900 text-white rounded-xl text-sm font-bold hover:bg-stone-800 transition-colors">Add Category</button>
+        </form>
+
+        <div v-if="categories.length === 0" class="bg-white border border-dashed border-stone-200 rounded-2xl p-8 text-center text-sm text-stone-500">
+          No categories yet. Add your first category above, then assign products to it.
+        </div>
+
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-for="cat in categories" :key="cat" class="bg-white border border-stone-100 rounded-2xl p-5 flex items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-stone-850">{{ cat }}</p>
+              <p class="text-xs text-stone-500">{{ productCountForCategory(cat) }} product(s)</p>
+            </div>
+            <button 
+              @click="deleteCategory(cat)"
+              class="px-3 py-1.5 rounded-full text-xs font-bold border border-rose-100 text-rose-500 hover:bg-rose-50 transition-colors"
+            >
+              Remove
+            </button>
           </div>
         </div>
       </div>
 
       <!-- MODAL: ADD PRODUCT FORM -->
       <div v-if="addingProduct" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn" @click.self="cancelAdd">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative overflow-hidden animate-slideUp">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative overflow-hidden animate-slideUp max-h-[90vh] overflow-y-auto">
           <h3 class="font-serif text-xl font-bold text-stone-850 mb-4 border-b pb-3">Add Custom Artisan Creation</h3>
           
           <form @submit.prevent="saveAdd" class="space-y-3.5 text-sm">
@@ -359,6 +638,27 @@
               ></textarea>
             </div>
 
+            <div class="border border-stone-100 rounded-2xl p-4 bg-[#FBF7F2] space-y-3">
+              <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-600">
+                <input type="checkbox" v-model="productForm.customization.enabled" class="rounded border-stone-300 text-rose-500 focus:ring-rose-500/20" />
+                Supports Customization
+              </label>
+              <div v-if="productForm.customization.enabled" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2 text-xs text-stone-700">
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="productForm.customization.allowNotes" class="rounded border-stone-300 text-rose-500" /> Notes</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="productForm.customization.allowPhotos" class="rounded border-stone-300 text-rose-500" /> Photo Upload</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="productForm.customization.allowText" class="rounded border-stone-300 text-rose-500" /> Names/Text</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="productForm.customization.allowTheme" class="rounded border-stone-300 text-rose-500" /> Theme/Colors</label>
+                </div>
+                <textarea
+                  v-model="productForm.customization.instructions"
+                  rows="2"
+                  placeholder="Tell customers what details to share for this product..."
+                  class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none resize-none text-stone-800 text-xs bg-white"
+                ></textarea>
+              </div>
+            </div>
+
             <p class="text-xs text-red-500 font-semibold">{{ formError }}</p>
 
             <!-- Footer Buttons -->
@@ -372,7 +672,7 @@
 
       <!-- MODAL: EDIT PRODUCT FORM -->
       <div v-if="editingProduct" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn" @click.self="cancelEdit">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative overflow-hidden animate-slideUp">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative overflow-hidden animate-slideUp max-h-[90vh] overflow-y-auto">
           <h3 class="font-serif text-xl font-bold text-stone-850 mb-4 border-b pb-3">Edit Catalog Product</h3>
           
           <form @submit.prevent="saveEdit" class="space-y-3.5 text-sm">
@@ -480,6 +780,27 @@
               ></textarea>
             </div>
 
+            <div class="border border-stone-100 rounded-2xl p-4 bg-[#FBF7F2] space-y-3">
+              <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-600">
+                <input type="checkbox" v-model="editingProduct.customization.enabled" class="rounded border-stone-300 text-rose-500 focus:ring-rose-500/20" />
+                Supports Customization
+              </label>
+              <div v-if="editingProduct.customization.enabled" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2 text-xs text-stone-700">
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="editingProduct.customization.allowNotes" class="rounded border-stone-300 text-rose-500" /> Notes</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="editingProduct.customization.allowPhotos" class="rounded border-stone-300 text-rose-500" /> Photo Upload</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="editingProduct.customization.allowText" class="rounded border-stone-300 text-rose-500" /> Names/Text</label>
+                  <label class="flex items-center gap-2"><input type="checkbox" v-model="editingProduct.customization.allowTheme" class="rounded border-stone-300 text-rose-500" /> Theme/Colors</label>
+                </div>
+                <textarea
+                  v-model="editingProduct.customization.instructions"
+                  rows="2"
+                  placeholder="Tell customers what details to share for this product..."
+                  class="w-full px-3 py-2 border border-stone-200 rounded-xl focus:outline-none resize-none text-stone-800 text-xs bg-white"
+                ></textarea>
+              </div>
+            </div>
+
             <p class="text-xs text-red-500 font-semibold">{{ formError }}</p>
 
             <!-- Footer Buttons -->
@@ -513,17 +834,31 @@ export default {
       addingProduct: false,
       productForm: {
         name: '',
-        category: 'Resin Art',
+        category: '',
         price: '',
         inventory: '',
         image: '/assets/images/blue-daisy-bottle.png',
         images: [],
-        description: ''
+        description: '',
+        customization: {
+          enabled: true,
+          allowNotes: true,
+          allowPhotos: true,
+          allowText: false,
+          allowTheme: true,
+          instructions: 'Share your preferred colors, theme, room decor reference, or inspiration photo.'
+        }
       },
       formError: '',
       customTimelineNote: '',
       customCategory: '',
-      customCategoryEdit: ''
+      customCategoryEdit: '',
+      selectedCustomerEmail: '',
+      newCategoryName: '',
+      productSearch: '',
+      productCategoryFilter: '',
+      productStockFilter: '',
+      productSort: 'newest'
     };
   },
   computed: {
@@ -531,10 +866,33 @@ export default {
       return store;
     },
     categories() {
-      const base = ['Resin Art', 'Glass Art', 'Frames', 'Accessories', 'Chocolates'];
       const fromProducts = this.store.products.map(p => p.category).filter(Boolean);
-      const allUnique = new Set([...base, ...fromProducts]);
-      return Array.from(allUnique);
+      const allUnique = new Set([...this.store.categories, ...fromProducts]);
+      return Array.from(allUnique).sort((a, b) => a.localeCompare(b));
+    },
+    filteredAdminProducts() {
+      const query = this.productSearch.trim().toLowerCase();
+      const filtered = this.store.products.filter(product => {
+        const matchesSearch = !query
+          || product.name.toLowerCase().includes(query)
+          || product.category.toLowerCase().includes(query)
+          || String(product.id).includes(query);
+        const matchesCategory = !this.productCategoryFilter || product.category === this.productCategoryFilter;
+        const matchesStock = !this.productStockFilter
+          || (this.productStockFilter === 'available' && product.inventory > 3)
+          || (this.productStockFilter === 'low' && product.inventory > 0 && product.inventory <= 3)
+          || (this.productStockFilter === 'out' && product.inventory === 0);
+
+        return matchesSearch && matchesCategory && matchesStock;
+      });
+
+      return [...filtered].sort((a, b) => {
+        if (this.productSort === 'name') return a.name.localeCompare(b.name);
+        if (this.productSort === 'priceHigh') return Number(b.price) - Number(a.price);
+        if (this.productSort === 'priceLow') return Number(a.price) - Number(b.price);
+        if (this.productSort === 'stockLow') return Number(a.inventory) - Number(b.inventory);
+        return Number(b.id) - Number(a.id);
+      });
     },
     totalSales() {
       return parseFloat(this.store.orders.reduce((sum, o) => sum + o.total, 0).toFixed(2));
@@ -559,6 +917,29 @@ export default {
         }
       }
       return maxCat;
+    },
+    customersWithOrders() {
+      return this.store.users.filter(user => user.orderCount > 0);
+    },
+    customerInsightText() {
+      const customer = this.store.selectedCustomerDetails?.customer;
+      if (!customer) return '';
+      if (customer.orderCount === 0) {
+        return `${customer.name} has registered but has not ordered yet. This is a good customer to warm up with new drops, WhatsApp follow-ups, or first-order offers.`;
+      }
+      if (customer.valueLabel === 'High-value customer') {
+        return `${customer.name} is one of the strongest customers for the site, with ${customer.orderCount} order(s), ₹${customer.totalSpent} spent, and interest in ${customer.favoriteCategory}. Keep them close for launches and premium custom work.`;
+      }
+      if (customer.averageOrderValue >= 5000) {
+        return `${customer.name} places high-value orders when they buy. They may respond well to personalized gifting bundles and limited-edition pieces.`;
+      }
+      return `${customer.name} has started buying from KraftedLove. Their favorite category is ${customer.favoriteCategory}, so future recommendations can be shaped around that taste.`;
+    }
+  },
+  mounted() {
+    if (this.store.currentUser?.isAdmin) {
+      this.refreshCustomerData();
+      this.store.fetchCategories();
     }
   },
   methods: {
@@ -566,16 +947,21 @@ export default {
       const d = new Date(isoString);
       return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     },
+    openAnalyticsDashboard() {
+      this.store.trackEvent('nav_click', { page: '/analytics', metadata: { source: 'admin_dashboard' } });
+      window.open('/analytics', '_blank', 'noopener,noreferrer');
+    },
     startEdit(product) {
       this.editingProduct = { 
         ...product,
-        images: product.images ? [...product.images] : (product.image ? [product.image] : [])
+        images: product.images ? [...product.images] : (product.image ? [product.image] : []),
+        customization: this.defaultCustomizationForProduct(product)
       };
       this.customCategoryEdit = '';
       this.formError = '';
     },
-    saveEdit() {
-      if (!this.editingProduct.name.trim() || !this.editingProduct.price || !this.editingProduct.inventory) {
+    async saveEdit() {
+      if (!this.editingProduct.name.trim() || this.editingProduct.price === '' || this.editingProduct.inventory === '') {
         this.formError = 'Please fill out name, price, and stock levels.';
         return;
       }
@@ -586,9 +972,10 @@ export default {
           return;
         }
         this.editingProduct.category = this.customCategoryEdit.trim();
+        await this.store.adminAddCategory(this.editingProduct.category);
       }
       
-      const success = this.store.adminUpdateProduct(this.editingProduct);
+      const success = await this.store.adminUpdateProduct(this.editingProduct);
       if (success) {
         this.editingProduct = null;
         this.customCategoryEdit = '';
@@ -608,19 +995,20 @@ export default {
       this.addingProduct = true;
       this.productForm = {
         name: '',
-        category: 'Resin Art',
+        category: this.categories[0] || '',
         price: '',
         inventory: '',
         image: '/assets/images/blue-daisy-bottle.png',
         images: [],
-        description: ''
+        description: '',
+        customization: this.defaultCustomizationForProduct({ category: this.categories[0] || '' })
       };
       this.customCategory = '';
       this.formError = '';
     },
-    saveAdd() {
+    async saveAdd() {
       const f = this.productForm;
-      if (!f.name.trim() || !f.price || !f.inventory) {
+      if (!f.name.trim() || f.price === '' || f.inventory === '') {
         this.formError = 'Please fill out name, price, and stock levels.';
         return;
       }
@@ -631,18 +1019,21 @@ export default {
           return;
         }
         f.category = this.customCategory.trim();
+        await this.store.adminAddCategory(f.category);
       }
 
-      this.store.adminAddProduct(f);
-      this.addingProduct = false;
-      this.customCategory = '';
+      const product = await this.store.adminAddProduct(f);
+      if (product) {
+        this.addingProduct = false;
+        this.customCategory = '';
+      }
     },
     cancelAdd() {
       this.addingProduct = false;
       this.customCategory = '';
       this.formError = '';
     },
-    advanceOrderStatus(orderId, status) {
+    async advanceOrderStatus(orderId, status) {
       let defaultNote = '';
       if (status === 'Processing') {
         defaultNote = 'Artisan has started preparing packaging for your handmade treasures.';
@@ -654,9 +1045,107 @@ export default {
       }
 
       const note = this.customTimelineNote.trim() || defaultNote;
-      const success = this.store.adminUpdateOrderStatus(orderId, status, note);
+      const success = await this.store.adminUpdateOrderStatus(orderId, status, note);
       if (success) {
         this.customTimelineNote = '';
+      }
+    },
+    defaultCustomizationForProduct(product = {}) {
+      const incoming = product.customization || {};
+      const category = String(product.category || '').toLowerCase();
+      const name = String(product.name || '').toLowerCase();
+      let defaults = {
+        enabled: false,
+        allowNotes: false,
+        allowPhotos: false,
+        allowText: false,
+        allowTheme: false,
+        instructions: ''
+      };
+
+      if (category.includes('frame') || name.includes('frame') || name.includes('photo')) {
+        defaults = {
+          enabled: true,
+          allowNotes: true,
+          allowPhotos: true,
+          allowText: true,
+          allowTheme: true,
+          instructions: 'Upload the photo and share names, dates, colors, or message details for the frame.'
+        };
+      } else if (category.includes('accessor') || name.includes('kalire') || name.includes('wedding')) {
+        defaults = {
+          enabled: true,
+          allowNotes: true,
+          allowPhotos: true,
+          allowText: true,
+          allowTheme: true,
+          instructions: 'Share names, initials, wedding colors, outfit reference, or any personal message.'
+        };
+      } else if (category.includes('glass') || category.includes('resin') || name.includes('bottle') || name.includes('resin')) {
+        defaults = {
+          enabled: true,
+          allowNotes: true,
+          allowPhotos: true,
+          allowText: false,
+          allowTheme: true,
+          instructions: 'Share your preferred colors, theme, room decor reference, or inspiration photo.'
+        };
+      } else if (category.includes('chocolate') || name.includes('chocolate')) {
+        defaults = {
+          enabled: true,
+          allowNotes: true,
+          allowPhotos: false,
+          allowText: true,
+          allowTheme: false,
+          instructions: 'Add a gifting message, dietary note, or packaging preference.'
+        };
+      }
+
+      return {
+        enabled: incoming.enabled ?? defaults.enabled,
+        allowNotes: incoming.allowNotes ?? defaults.allowNotes,
+        allowPhotos: incoming.allowPhotos ?? defaults.allowPhotos,
+        allowText: incoming.allowText ?? defaults.allowText,
+        allowTheme: incoming.allowTheme ?? defaults.allowTheme,
+        instructions: incoming.instructions ?? defaults.instructions
+      };
+    },
+    async deleteOrder(orderId) {
+      if (confirm(`Delete order ${orderId}? This cannot be undone.`)) {
+        await this.store.adminDeleteOrder(orderId);
+      }
+    },
+    async refreshCustomerData() {
+      await this.store.fetchAdminCustomers();
+      await this.store.fetchCustomerInsights();
+      if (!this.selectedCustomerEmail && this.store.users.length > 0) {
+        await this.selectCustomer(this.store.users[0].email);
+      }
+    },
+    async selectCustomer(email) {
+      this.selectedCustomerEmail = email;
+      await this.store.fetchCustomerDetails(email);
+    },
+    productCountForCategory(category) {
+      return this.store.products.filter(product => product.category === category).length;
+    },
+    clearProductFilters() {
+      this.productSearch = '';
+      this.productCategoryFilter = '';
+      this.productStockFilter = '';
+      this.productSort = 'newest';
+    },
+    async addCategory() {
+      const name = this.newCategoryName.trim();
+      if (!name) return;
+      const result = await this.store.adminAddCategory(name);
+      if (result.success) {
+        this.newCategoryName = '';
+      }
+    },
+    async deleteCategory(category) {
+      if (confirm(`Remove "${category}" from the site categories? Products using it must be moved first.`)) {
+        await this.store.adminDeleteCategory(category);
       }
     },
     async handleImageUpload(event, target) {

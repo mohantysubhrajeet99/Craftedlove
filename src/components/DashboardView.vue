@@ -209,6 +209,30 @@
               </div>
             </div>
 
+            <div v-if="selectedOrder.customizationRequests && selectedOrder.customizationRequests.length > 0" class="space-y-3 pt-2">
+              <h3 class="font-serif text-sm font-semibold uppercase tracking-wider text-stone-500">Customization Submitted</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div v-for="request in selectedOrder.customizationRequests" :key="request.productId" class="bg-rose-50/50 border border-rose-100 rounded-2xl p-4 text-xs space-y-2">
+                  <p class="font-bold text-stone-850">{{ request.productName }}</p>
+                  <p v-if="request.notes" class="text-stone-700"><strong>Notes:</strong> {{ request.notes }}</p>
+                  <p v-if="request.customText" class="text-stone-700"><strong>Text:</strong> {{ request.customText }}</p>
+                  <p v-if="request.theme" class="text-stone-700"><strong>Theme:</strong> {{ request.theme }}</p>
+                  <div v-if="request.files && request.files.length > 0" class="flex flex-wrap gap-2 pt-1">
+                    <a
+                      v-for="(file, idx) in request.files"
+                      :key="`${request.productId}-${idx}`"
+                      :href="file.data"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="block w-14 h-14 rounded-lg overflow-hidden border border-white shadow-sm bg-white"
+                    >
+                      <img :src="file.data" :alt="file.name" class="w-full h-full object-cover" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- DELIVERY ADDRESS & TOTALS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-stone-100">
               <!-- Address -->

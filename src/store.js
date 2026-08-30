@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue';
 
 const ADMIN_EMAIL = 'owner@kraftedlove.in';
+const SESSION_KEY = 'kraftedlove_analytics_session';
 
 // Helper to load state from localStorage or use defaults
 const getStored = (key, fallback) => {
@@ -15,10 +16,24 @@ const getStored = (key, fallback) => {
   return fallback;
 };
 
+const getAnalyticsSessionId = () => {
+  let sessionId = localStorage.getItem(SESSION_KEY);
+  if (!sessionId) {
+    sessionId = `kl_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(SESSION_KEY, sessionId);
+  }
+  return sessionId;
+};
+
 // Create the global reactive store
 export const store = reactive({
   products: [],
   orders: [],
+  categories: [],
+  users: [],
+  customerInsights: null,
+  selectedCustomerDetails: null,
+  analytics: null,
   currentUser: getStored('currentUser', null),
   cart: getStored('cart', []),
   toasts: [],
@@ -33,9 +48,19 @@ export const store = reactive({
       const res = await fetch('/api/products');
       if (res.ok) {
         this.products = await res.json();
+        this.cart = this.cart.map(item => {
+          const liveProduct = this.products.find(product => product.id === item.product.id);
+          return liveProduct ? { ...item, product: liveProduct } : item;
+        });
       }
+      await this.fetchCategories();
       if (this.currentUser) {
         await this.fetchOrders();
+        if (this.currentUser.isAdmin) {
+          await this.fetchAdminCustomers();
+          await this.fetchCustomerInsights();
+          await this.fetchAnalytics();
+        }
       }
     } catch (e) {
       console.error('Failed to load products:', e);
@@ -48,10 +73,22 @@ export const store = reactive({
       const isAdmin = this.currentUser.isAdmin;
       const res = await fetch(`/api/orders?email=${encodeURIComponent(email)}&isAdmin=${isAdmin}`);
       if (res.ok) {
-        this.orders = await res.json();
+        const orders = await res.json();
+        this.orders = orders.filter(order => order.id !== 'ORD-9874' && !(order.userName === 'Jane Doe' && Number(order.total) === 6867.76));
       }
     } catch (e) {
       console.error('Failed to fetch orders:', e);
+    }
+  },
+
+  async fetchCategories() {
+    try {
+      const res = await fetch('/api/categories');
+      if (res.ok) {
+        this.categories = await res.json();
+      }
+    } catch (e) {
+      console.error('Failed to fetch categories:', e);
     }
   },
 
@@ -76,7 +113,14 @@ export const store = reactive({
       if (res.ok && data.success) {
         this.currentUser = data.user;
         this.addToast(`Welcome back, ${data.user.name}!`, 'success');
+        await this.fetchCategories();
         await this.fetchOrders();
+        if (data.user.isAdmin) {
+          await this.fetchAdminCustomers();
+          await this.fetchCustomerInsights();
+          await this.fetchAnalytics();
+        }
+        this.trackEvent('login');
         return { success: true };
       } else {
         this.addToast(data.message || 'Invalid email or password.', 'error');
@@ -88,18 +132,19 @@ export const store = reactive({
     }
   },
 
-  async register(name, email, password) {
+  async register(name, email, phone, password) {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, phone, password })
       });
       const data = await res.json();
       if (res.ok && data.success) {
         this.currentUser = data.user;
         this.addToast(`Account created! Welcome, ${name}.`, 'success');
         await this.fetchOrders();
+        this.trackEvent('register');
         return { success: true };
       } else {
         this.addToast(data.message || 'Registration failed.', 'error');
@@ -115,6 +160,10 @@ export const store = reactive({
     this.addToast('Logged out successfully.', 'info');
     this.currentUser = null;
     this.orders = [];
+    this.users = [];
+    this.customerInsights = null;
+    this.selectedCustomerDetails = null;
+    this.analytics = null;
   },
 
   // CART ACTIONS
@@ -144,6 +193,13 @@ export const store = reactive({
       this.cart.push({ product, quantity });
     }
     
+    this.trackEvent('add_to_cart', {
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      value: product.price * quantity,
+      metadata: { quantity }
+    });
     this.addToast(`Added "${product.name}" to cart.`, 'success');
   },
 
@@ -178,7 +234,7 @@ export const store = reactive({
   },
 
   // CHECKOUT
-  async createOrder(shippingDetails) {
+  async createOrder(shippingDetails, customizationRequests = []) {
     if (this.cart.length === 0) {
       this.addToast('Your cart is empty.', 'error');
       return { success: false };
@@ -206,7 +262,8 @@ export const store = reactive({
           shipping,
           tax,
           total,
-          shippingDetails
+          shippingDetails,
+          customizationRequests
         })
       });
       const data = await res.json();
@@ -218,6 +275,7 @@ export const store = reactive({
         }
 
         this.clearCart();
+        this.trackEvent('order_placed', { value: total });
         this.addToast('Thank you! Your order has been placed.', 'success');
         await this.fetchOrders();
         return { success: true, orderId: data.orderId };
@@ -242,6 +300,7 @@ export const store = reactive({
       if (res.ok) {
         const newProduct = await res.json();
         this.products.push(newProduct);
+        await this.fetchCategories();
         this.addToast(`Product "${newProduct.name}" added to catalog.`, 'success');
         return newProduct;
       }
@@ -263,6 +322,7 @@ export const store = reactive({
         if (index !== -1) {
           this.products[index] = prod;
         }
+        await this.fetchCategories();
         this.addToast(`Product "${updatedProduct.name}" updated.`, 'success');
         
         this.cart = this.cart.map(c => {
@@ -313,12 +373,146 @@ export const store = reactive({
           this.orders[index] = updatedOrder;
         }
         this.addToast(`Order ${orderId} updated to ${status}.`, 'success');
+        await this.fetchAdminCustomers();
+        await this.fetchCustomerInsights();
         return true;
       }
     } catch (e) {
       this.addToast('Failed to update order status.', 'error');
     }
     return false;
+  },
+
+  async adminDeleteOrder(orderId) {
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (res.ok) {
+        this.orders = this.orders.filter(order => order.id !== orderId);
+        await this.fetchAdminCustomers();
+        await this.fetchCustomerInsights();
+        await this.fetchAnalytics();
+        this.addToast(`Order ${orderId} deleted.`, 'info');
+        return { success: true };
+      }
+      this.addToast(data.error || 'Failed to delete order.', 'error');
+      return { success: false, message: data.error };
+    } catch (e) {
+      this.addToast('Failed to delete order.', 'error');
+      return { success: false };
+    }
+  },
+
+  async adminAddCategory(name) {
+    try {
+      const res = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        await this.fetchCategories();
+        this.addToast(`Category "${data.name}" added.`, 'success');
+        return { success: true };
+      }
+      this.addToast(data.error || 'Failed to add category.', 'error');
+      return { success: false, message: data.error };
+    } catch (e) {
+      this.addToast('Failed to add category.', 'error');
+      return { success: false };
+    }
+  },
+
+  async adminDeleteCategory(name) {
+    try {
+      const res = await fetch(`/api/categories/${encodeURIComponent(name)}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        await this.fetchCategories();
+        this.addToast(`Category "${name}" removed.`, 'info');
+        return { success: true };
+      }
+      this.addToast(data.error || 'Failed to remove category.', 'error');
+      return { success: false, message: data.error };
+    } catch (e) {
+      this.addToast('Failed to remove category.', 'error');
+      return { success: false };
+    }
+  },
+
+  async fetchAdminCustomers() {
+    if (!this.currentUser?.isAdmin) return;
+    try {
+      const res = await fetch('/api/admin/users');
+      if (res.ok) {
+        this.users = await res.json();
+      }
+    } catch (e) {
+      console.error('Failed to fetch customers:', e);
+    }
+  },
+
+  async fetchCustomerInsights() {
+    if (!this.currentUser?.isAdmin) return;
+    try {
+      const res = await fetch('/api/admin/customer-insights');
+      if (res.ok) {
+        this.customerInsights = await res.json();
+      }
+    } catch (e) {
+      console.error('Failed to fetch customer insights:', e);
+    }
+  },
+
+  async fetchCustomerDetails(email) {
+    if (!this.currentUser?.isAdmin) return null;
+    try {
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(email)}`);
+      if (res.ok) {
+        this.selectedCustomerDetails = await res.json();
+        return this.selectedCustomerDetails;
+      }
+    } catch (e) {
+      console.error('Failed to fetch customer details:', e);
+    }
+    return null;
+  },
+
+  async trackEvent(type, payload = {}) {
+    try {
+      const body = {
+        type,
+        page: window.location.pathname,
+        sessionId: getAnalyticsSessionId(),
+        userEmail: this.currentUser?.email || '',
+        ...payload
+      };
+
+      await fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    } catch (e) {
+      // Analytics must never interrupt shopping or admin workflows.
+    }
+  },
+
+  async fetchAnalytics(days = 30) {
+    if (!this.currentUser?.isAdmin) return null;
+    try {
+      const res = await fetch(`/api/admin/analytics?days=${encodeURIComponent(days)}`);
+      if (res.ok) {
+        this.analytics = await res.json();
+        return this.analytics;
+      }
+    } catch (e) {
+      console.error('Failed to fetch analytics:', e);
+    }
+    return null;
   },
 
   // GETTERS REPLICATED REACTIVELY

@@ -1,7 +1,8 @@
 <template>
-<footer class="bg-stone-900 text-stone-300 border-t border-stone-850">
+<footer class="bg-[#161111] text-stone-300 border-t border-rose-950/30 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(244,63,94,0.14),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(99,102,241,0.12),transparent_26%)] pointer-events-none"></div>
     <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16">
-      <div class="flex flex-col md:flex-row md:justify-between items-start gap-8 sm:gap-12">
+      <div class="relative z-10 flex flex-col md:flex-row md:justify-between items-start gap-8 sm:gap-12">
         
         <!-- Column 1: Brand Info -->
         <div class="space-y-4 max-w-sm">
@@ -9,7 +10,7 @@
             KraftedLove
           </span>
           <p class="text-sm text-stone-300 leading-relaxed">
-            We curate and hand-pour beautiful, modern decor objects, pressed floral frames, and single-origin artisanal chocolates. Every piece is made with love by our collective of local artists.
+            Thoughtful handmade decor, keepsakes, custom gifts, and artisanal chocolates from Bangalore. Crafted slowly, packed warmly, and made to be remembered.
           </p>
           <div class="flex items-center space-x-3 text-stone-400 pt-2">
             <a href="https://www.instagram.com/__lovebox__?igsi=bzN4MzY3cmVlYm43" target="_blank" rel="noopener noreferrer" class="hover:text-rose-400 transition-colors" aria-label="Instagram">
@@ -39,22 +40,22 @@
             </li>
             <li class="flex items-center gap-2">
               <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <span>hello@kraftedlove.com</span>
+              <span>hello@kraftedlove.in</span>
             </li>
             <li class="flex items-center gap-2">
               <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.14-4.117-6.942-6.942l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-              <span>+1 (503) 555-0199</span>
+              <span>+91 98765 43210</span>
             </li>
           </ul>
         </div>
 
       </div>
 
-      <div class="border-t border-stone-880 mt-12 pt-8 text-center text-xs text-stone-400">
+      <div class="relative z-10 border-t border-white/10 mt-12 pt-8 text-center text-xs text-stone-400">
         <p>© 2026 KraftedLove. All rights reserved. Handcrafted with passion and care.</p>
       </div>
     </div>
-  </footer>>
+  </footer>
 </template>
 
 <script>

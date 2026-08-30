@@ -2,7 +2,7 @@
   <div class="max-w-none px-4 sm:px-6 lg:px-12 xl:px-16 py-8">
     
     <!-- Page Title -->
-    <div class="border-b border-stone-150 pb-6 mb-8">
+    <div class="border-b border-stone-150 pb-6 mb-8 reveal-soft">
       <h1 class="font-serif text-3xl sm:text-4xl font-bold text-stone-850">Explore Catalog</h1>
       <p class="text-sm text-stone-700 mt-2">Discover handcrafted wonders, mirror arts, and premium chocolate box collections.</p>
     </div>
@@ -14,7 +14,7 @@
       <div class="space-y-6 lg:col-span-1">
         
         <!-- Search box -->
-        <div class="bg-stone-50 border border-stone-100 rounded-2xl p-5 space-y-2.5">
+        <div class="bg-white/70 border border-stone-100 rounded-2xl p-5 space-y-2.5 shadow-sm">
           <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Search Products</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-700">
@@ -23,6 +23,7 @@
             <input 
               type="text" 
               v-model="searchQuery" 
+              @change="trackSearch"
               placeholder="Search by name, tags..." 
               class="pl-9 w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/10 focus:border-rose-450 transition-all"
             />
@@ -30,14 +31,14 @@
         </div>
 
         <!-- Categories List -->
-        <div class="bg-stone-50 border border-stone-100 rounded-2xl p-5 space-y-3">
+        <div class="bg-white/70 border border-stone-100 rounded-2xl p-5 space-y-3 shadow-sm">
           <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Categories</label>
           <div class="flex flex-wrap lg:flex-col gap-2">
             <button 
               v-for="cat in categories" 
               :key="cat"
               @click="selectCategory(cat)"
-              class="px-4 py-2 text-left rounded-xl text-xs sm:text-sm font-medium transition-all"
+              class="px-4 py-2 text-left rounded-xl text-xs sm:text-sm font-medium transition-all active:scale-[0.98]"
               :class="((categoryFilter === '' && cat === 'All') || categoryFilter === cat) 
                 ? 'bg-gradient-to-r from-rose-500 to-pink-650 text-white shadow-sm shadow-rose-500/10' 
                 : 'bg-white hover:bg-stone-100 text-stone-600 border border-stone-100'"
@@ -48,7 +49,7 @@
         </div>
 
         <!-- Sort and Availability -->
-        <div class="bg-stone-50 border border-stone-100 rounded-2xl p-5 space-y-4">
+        <div class="bg-white/70 border border-stone-100 rounded-2xl p-5 space-y-4 shadow-sm">
           
           <!-- Sort dropdown -->
           <div class="space-y-2">
@@ -95,12 +96,12 @@
           <div 
             v-for="product in filteredProducts" 
             :key="product.id"
-            class="group bg-white border border-stone-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-stone-250 transition-all duration-300 flex flex-col justify-between"
+            class="group bg-white border border-stone-100 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-stone-250 transition-all duration-500 flex flex-col justify-between"
           >
             
             <!-- Thumbnail -->
             <div class="aspect-square bg-[#FBF7F2] overflow-hidden relative cursor-pointer" @click="openDetail(product)">
-              <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+              <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" />
               
               <!-- Category Badge -->
               <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-stone-800 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
@@ -147,7 +148,7 @@
                 <button 
                   v-if="product.inventory > 0"
                   @click="addToCart(product)"
-                  class="py-2 px-4 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-full active:scale-95 transition-all flex items-center gap-1 shadow-sm shadow-rose-500/5 hover:shadow-md"
+                  class="py-2 px-4 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-full active:scale-95 transition-all flex items-center gap-1 shadow-sm shadow-rose-500/5 hover:shadow-md hover:shadow-rose-500/20"
                 >
                   Add to Bag
                 </button>
@@ -170,16 +171,16 @@
 
     </div>    <!-- PRODUCT DETAIL MODAL -->
     <teleport to="body">
-      <div v-if="selectedProduct" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-[70] flex items-center justify-center p-4 overflow-y-auto animate-fadeIn" @click.self="closeDetail">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative animate-slideUp">
+      <div v-if="selectedProduct" class="fixed inset-0 bg-stone-950/55 backdrop-blur-md z-[70] flex items-center justify-center p-4 overflow-y-auto animate-fadeIn" @click.self="closeDetail">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative animate-slideUp">
           
           <!-- Close Modal -->
-          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-700 hover:text-stone-600 p-2 rounded-full bg-[#FBF7F2]/80 backdrop-blur-sm hover:bg-stone-50 transition-colors z-10 border border-stone-100 shadow-sm">
+          <button @click="closeDetail" class="absolute top-5 right-5 text-stone-700 hover:text-stone-900 p-2 rounded-full bg-white/85 backdrop-blur-sm hover:bg-white transition-colors z-10 border border-stone-100 shadow-sm">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
 
           <!-- Left: Interactive Image Gallery -->
-          <div class="w-full md:w-1/2 bg-[#FBF7F2] flex flex-col justify-between p-4 space-y-4">
+          <div class="w-full md:w-[46%] bg-[#FBF7F2] flex flex-col justify-between p-4 space-y-4">
             <!-- Active Image View -->
             <div class="flex-grow rounded-2xl overflow-hidden relative bg-stone-100 min-h-[250px] md:min-h-[380px] h-[300px] md:h-auto">
               <img 
@@ -210,7 +211,7 @@
           </div>
 
           <!-- Right: Details, Reviews Form -->
-          <div class="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto flex flex-col justify-between h-[450px] md:h-[600px] space-y-6">
+          <div class="w-full md:w-[54%] p-6 sm:p-8 overflow-y-auto flex flex-col justify-between h-[450px] md:h-[600px] space-y-6">
             
             <div class="space-y-4">
               <!-- Category and Rating -->
@@ -225,7 +226,7 @@
 
               <!-- Name & Price -->
               <div class="space-y-1">
-                <h2 class="font-serif text-2xl font-bold text-stone-855 leading-tight">{{ selectedProduct.name }}</h2>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-855 leading-tight">{{ selectedProduct.name }}</h2>
                 <div class="flex items-baseline gap-2">
                   <span class="text-2xl font-bold text-stone-855 font-sans">₹<span>{{ selectedProduct.price }}</span></span>
                 </div>
@@ -245,6 +246,11 @@
                   <span class="w-2 h-2 rounded-full bg-green-500"></span>
                   In Stock ({{ selectedProduct.inventory }} available)
                 </span>
+              </div>
+
+              <div v-if="selectedProduct.customization?.enabled" class="rounded-2xl bg-rose-50 border border-rose-100 p-3 text-xs text-stone-700">
+                <p class="font-bold text-rose-600 uppercase tracking-wider">Customization Available</p>
+                <p class="mt-1">{{ selectedProduct.customization.instructions || 'You can share personalization details during checkout.' }}</p>
               </div>
 
               <!-- Description -->
@@ -272,7 +278,7 @@
               <button 
                 v-if="selectedProduct.inventory > 0"
                 @click="handleModalAddToCart" 
-                class="w-full py-3.5 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg shadow-rose-500/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                class="w-full py-3.5 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-rose-500/25 shadow-rose-500/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
               >
                 Add {{ modalQuantity }} to Bag — ₹<span>{{ (selectedProduct.price * modalQuantity).toFixed(2) }}</span>
               </button>
@@ -404,9 +410,9 @@ export default {
       return store;
     },
     categories() {
-      const base = ['All', 'Resin Art', 'Glass Art', 'Frames', 'Accessories', 'Chocolates'];
+      const base = ['All'];
       const fromProducts = this.store.products.map(p => p.category).filter(Boolean);
-      const allUnique = new Set([...base, ...fromProducts]);
+      const allUnique = new Set([...base, ...this.store.categories, ...fromProducts]);
       return Array.from(allUnique);
     },
     filteredProducts() {
@@ -443,6 +449,10 @@ export default {
   methods: {
     selectCategory(cat) {
       this.setCategoryFilter(cat === 'All' ? '' : cat);
+      this.store.trackEvent('category_filter', {
+        category: cat === 'All' ? 'All' : cat,
+        metadata: { source: 'shop_filter' }
+      });
     },
     openDetail(product) {
       this.selectedProduct = product;
@@ -452,12 +462,25 @@ export default {
       this.reviewRating = 5;
       this.reviewComment = '';
       this.reviewError = '';
+      this.store.trackEvent('product_view', {
+        productId: product.id,
+        productName: product.name,
+        category: product.category,
+        value: product.price
+      });
     },
     closeDetail() {
       this.selectedProduct = null;
     },
     addToCart(product, quantity = 1) {
       this.store.addToCart(product, quantity);
+    },
+    trackSearch() {
+      const query = this.searchQuery.trim();
+      if (!query) return;
+      this.store.trackEvent('search', {
+        metadata: { query, results: this.filteredProducts.length }
+      });
     },
     handleModalAddToCart() {
       this.addToCart(this.selectedProduct, this.modalQuantity);

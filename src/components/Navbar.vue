@@ -82,12 +82,12 @@
 
     <!-- Cart Drawer Overlay -->
     <teleport to="body">
-      <div v-if="cartOpen" @click.self="toggleCart" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity duration-300">
+      <div v-if="cartOpen" @click.self="toggleCart" class="fixed inset-0 bg-stone-950/45 backdrop-blur-md z-50 transition-opacity duration-300">
         <!-- Drawer Panel -->
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col h-full animate-slideIn">
           
           <!-- Drawer Header -->
-          <div class="p-5 border-b border-stone-100 flex items-center justify-between">
+          <div class="p-5 border-b border-stone-100 flex items-center justify-between bg-[#FFFCF8]">
             <h2 class="text-xl font-bold text-stone-800 flex items-center gap-2">
               Your Bag
               <span class="text-sm font-normal text-stone-400 bg-stone-100 px-2 py-0.5 rounded-full">{{ store.cartCount }}</span>
@@ -100,7 +100,7 @@
           </div>
 
           <!-- Drawer Content -->
-          <div class="flex-grow overflow-y-auto p-5 space-y-4">
+          <div class="flex-grow overflow-y-auto p-5 space-y-4 bg-white">
             
             <!-- Empty State -->
             <div v-if="store.cart.length === 0" class="text-center py-16 space-y-4">
@@ -118,11 +118,11 @@
 
             <!-- Items List -->
             <div v-else class="space-y-4">
-              <div v-for="item in store.cart" :key="item.product.id" class="flex gap-4 pb-4 border-b border-stone-100 last:border-0">
-                <img :src="item.product.image" :alt="item.product.name" class="w-16 h-16 rounded-xl object-cover bg-[#FBF7F2] flex-shrink-0" />
+              <div v-for="item in store.cart" :key="item.product.id" class="flex gap-3 p-3 border border-stone-100 rounded-2xl bg-[#FFFCF8]">
+                <img :src="item.product.image" :alt="item.product.name" class="w-[72px] h-[72px] rounded-xl object-cover bg-[#FBF7F2] flex-shrink-0" />
                 
                 <!-- Product Details -->
-                <div class="flex-grow flex flex-col justify-between">
+                <div class="flex-grow min-w-0 flex flex-col justify-between gap-2">
                   <div>
                     <h4 class="font-semibold text-sm text-stone-800 line-clamp-1 leading-tight">{{ item.product.name }}</h4>
                     <p class="text-xs text-stone-400 mt-0.5">{{ item.product.category }}</p>
@@ -135,7 +135,7 @@
                       <span class="px-2 font-medium text-stone-700 min-w-[20px] text-center">{{ item.quantity }}</span>
                       <button @click="store.updateCartQuantity(item.product.id, item.quantity + 1)" class="px-2.5 py-1 text-stone-400 hover:text-stone-850 hover:bg-stone-100 transition-colors">+</button>
                     </div>
-                    <span class="font-bold text-stone-800 text-sm">₹<span>{{ (item.product.price * item.quantity).toFixed(2) }}</span></span>
+                    <span class="font-bold text-stone-800 text-sm whitespace-nowrap">₹<span>{{ (item.product.price * item.quantity).toFixed(2) }}</span></span>
                   </div>
                 </div>
 
@@ -151,7 +151,7 @@
           </div>
 
           <!-- Drawer Footer (Sticky Checkout) -->
-          <div v-if="store.cart.length > 0" class="p-5 border-t border-stone-100 bg-[#FBF7F2] space-y-4">
+          <div v-if="store.cart.length > 0" class="p-5 border-t border-stone-100 bg-[#FFFCF8] space-y-4 shadow-[0_-10px_30px_rgba(28,25,23,0.04)]">
             
             <div class="space-y-1.5 text-sm text-stone-500">
               <div class="flex justify-between">
@@ -172,8 +172,8 @@
 
             <!-- Buttons -->
             <div class="flex gap-3">
-              <button @click="toggleCart" class="w-1/3 py-3 border border-stone-200 text-stone-600 font-semibold rounded-full hover:bg-white transition-colors text-sm">Keep Browsing</button>
-              <button @click="triggerCheckout" class="w-2/3 py-3 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-full hover:shadow-lg shadow-rose-500/20 active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-1">
+              <button @click="toggleCart" class="w-1/3 py-3 border border-stone-200 text-stone-600 font-semibold rounded-full hover:bg-white transition-colors text-sm">Browse</button>
+              <button @click="triggerCheckout" class="w-2/3 py-3 bg-gradient-to-r from-rose-500 to-pink-650 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-rose-500/25 shadow-rose-500/20 active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-1">
                 Checkout
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
@@ -226,12 +226,16 @@ export default {
   },
   methods: {
     handleNav(view) {
+      this.store.trackEvent('nav_click', { page: view === 'home' ? '/' : `/${view}` });
       this.setView(view);
       this.mobileMenuOpen = false;
       this.profileDropdownOpen = false;
     },
     toggleCart() {
       this.cartOpen = !this.cartOpen;
+      if (this.cartOpen) {
+        this.store.trackEvent('cart_open', { value: this.store.cartSubtotal });
+      }
     },
     toggleProfile() {
       this.profileDropdownOpen = !this.profileDropdownOpen;

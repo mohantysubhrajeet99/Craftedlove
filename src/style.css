@@ -9,6 +9,11 @@ body, #app {
   color: #1c1917;
 }
 
+::selection {
+  background: rgba(244, 63, 94, 0.18);
+  color: #1c1917;
+}
+
 /* Force any lingering stone-50 backgrounds to cream */
 .bg-stone-50 {
   background-color: #FBF7F2 !important;
@@ -55,4 +60,63 @@ body, #app {
 .no-select {
   user-select: none;
   -webkit-user-select: none;
+}
+
+.reveal-soft {
+  animation: reveal-soft 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reveal-delay-1 {
+  animation-delay: 0.12s;
+}
+
+.reveal-delay-2 {
+  animation-delay: 0.24s;
+}
+
+.hover-lift {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 18px 42px rgba(28, 25, 23, 0.12);
+}
+
+.hero-float-slow {
+  animation: hero-float-slow 8s ease-in-out infinite;
+}
+
+.hero-float-medium {
+  animation: hero-float-medium 6.5s ease-in-out infinite;
+}
+
+@keyframes reveal-soft {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-float-slow {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+
+@keyframes hero-float-medium {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50% { transform: translateY(8px) rotate(1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
