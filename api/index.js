@@ -319,6 +319,17 @@ async function seedDatabase() {
   if (uCount === 0) {
     await User.insertMany(DEFAULT_USERS);
     console.log('Seeded users database');
+  } else {
+    const hasAdmin = await User.findOne({ email: 'admin@kraftedlove.com' });
+    if (!hasAdmin) {
+      await User.create({ name: 'Store Owner', email: 'admin@kraftedlove.com', password: 'admin123', isAdmin: true });
+      console.log('Seeded missing admin user');
+    }
+    const hasUser = await User.findOne({ email: 'user@kraftedlove.com' });
+    if (!hasUser) {
+      await User.create({ name: 'Jane Doe', email: 'user@kraftedlove.com', password: 'user123', isAdmin: false });
+      console.log('Seeded missing default user');
+    }
   }
 
   const oCount = await Order.countDocuments();
