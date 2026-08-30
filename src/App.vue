@@ -92,7 +92,7 @@
       :onClose="closeAuth"
     />
 
-    <!-- SIMULATED CHECKOUT MODAL OVERLAY -->
+    <!-- CHECKOUT MODAL OVERLAY -->
     <div v-if="checkoutModalOpen" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn" @click.self="closeCheckout">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl p-6 sm:p-8 relative overflow-hidden animate-slideUp max-h-[90vh] flex flex-col">
         
@@ -137,7 +137,7 @@
 
           <!-- Payment Fields -->
           <div class="space-y-3 pt-2">
-            <h3 class="font-serif font-bold text-stone-700 text-xs sm:text-sm uppercase tracking-wider text-rose-500">2. Mock Payment</h3>
+            <h3 class="font-serif font-bold text-stone-700 text-xs sm:text-sm uppercase tracking-wider text-rose-500">2. Payment</h3>
             
             <div class="space-y-1">
               <label class="text-xs font-semibold text-stone-450 uppercase">Name on Card</label>
@@ -446,7 +446,6 @@ export default {
       categoryFilter: '',
       authModalOpen: false,
       checkoutModalOpen: false,
-      demoMenuOpen: false,
       checkoutForm: {
         address: '',
         city: '',
@@ -777,7 +776,7 @@ export default {
     closeCheckout() {
       this.checkoutModalOpen = false;
     },
-    submitCheckout() {
+    async submitCheckout() {
       const f = this.checkoutForm;
       if (!f.address.trim() || !f.city.trim() || !f.zip.trim() || !f.cardName.trim() || !f.cardNumber || !f.cardCvv) {
         this.checkoutError = 'Please fill out all shipping and payment fields.';
@@ -792,7 +791,7 @@ export default {
       this.isCheckingOut = true;
       this.checkoutError = '';
 
-      setTimeout(() => {
+      setTimeout(async () => {
         const shippingDetails = {
           address: f.address.trim(),
           city: f.city.trim(),
@@ -800,7 +799,7 @@ export default {
           country: f.country
         };
 
-        const res = this.store.createOrder(shippingDetails);
+        const res = await this.store.createOrder(shippingDetails);
         this.isCheckingOut = false;
 
         if (res.success) {
@@ -820,22 +819,6 @@ export default {
           this.checkoutError = 'Transaction failed. Please check inventory stock levels.';
         }
       }, 1500);
-    },
-    setDemoRole(role) {
-      if (role === 'admin') {
-        this.store.login('admin@kraftedlove.com', 'admin123');
-        this.setView('admin');
-      } else if (role === 'customer') {
-        this.store.login('user@kraftedlove.com', 'user123');
-        this.setView('dashboard');
-      } else if (role === 'logout') {
-        this.store.logout();
-        this.setView('home');
-      } else if (role === 'reset') {
-        this.store.resetStore();
-        this.setView('home');
-      }
-      this.demoMenuOpen = false;
     },
     handleBgMouseMove(e) {
       this.bgMouse.x = e.clientX;

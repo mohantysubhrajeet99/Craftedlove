@@ -187,16 +187,16 @@ export default {
       this.errors = err;
       return Object.keys(err).length === 0;
     },
-    handleSubmit() {
+    async handleSubmit() {
       if (!this.validate()) return;
 
       if (this.isLogin) {
-        const res = this.store.login(this.email, this.password);
+        const res = await this.store.login(this.email, this.password);
         if (res.success) {
           this.closeModal();
         }
       } else {
-        const res = this.store.register(this.name, this.email, this.password);
+        const res = await this.store.register(this.name, this.email, this.password);
         if (res.success) {
           this.closeModal();
         }
