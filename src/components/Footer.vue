@@ -12,7 +12,7 @@
             We curate and hand-pour beautiful, modern decor objects, pressed floral frames, and single-origin artisanal chocolates. Every piece is made with love by our collective of local artists.
           </p>
           <div class="flex items-center space-x-3 text-stone-400 pt-2">
-            <a href="#" class="hover:text-rose-400 transition-colors" aria-label="Instagram">
+            <a href="https://www.instagram.com/__lovebox__?igsi=bzN4MzY3cmVlYm43" target="_blank" rel="noopener noreferrer" class="hover:text-rose-400 transition-colors" aria-label="Instagram">
               <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
             </a>
           </div>
@@ -35,7 +35,7 @@
           <ul class="space-y-2.5 text-sm text-stone-300">
             <li class="flex items-center gap-2">
               <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>456 Artisan Way, Studio 12, Portland, OR</span>
+              <span>Munekolala, 5th cross, Bangalore, 560037</span>
             </li>
             <li class="flex items-center gap-2">
               <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
